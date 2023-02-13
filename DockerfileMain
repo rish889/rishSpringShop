@@ -1,5 +1,5 @@
-# docker build -f ./DockerfileMain -t rish889/rish-spring-shop:0.0.1-SNAPSHOT .
-# docker run -p 8080:8080 -t modulith-web
+# DOCKER_BUILDKIT=1 docker build -f ./DockerfileMain -t rish889/rish-spring-shop:0.0.1-SNAPSHOT .
+# docker run -p 8080:8080 -t rish889/rish-spring-shop:0.0.1-SNAPSHOT
 
 FROM maven:3.8.6-openjdk-18 as maven_build
 WORKDIR /app

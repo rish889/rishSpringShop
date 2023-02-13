@@ -11,6 +11,6 @@ public class HealthController {
 
     @GetMapping
     private Mono<String> healthCheck() {
-        return Mono.just("Rish Shop Healthy");
+        return Mono.just("Rish Shop Healthy 1");
     }
 }
