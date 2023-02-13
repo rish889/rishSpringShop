@@ -17,13 +17,6 @@ public class HelloEcsStack extends Stack {
     public HelloEcsStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
-//        ApplicationLoadBalancedFargateService.Builder.create(this, "MyWebServer")
-//                .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder()
-//                        .image(ContainerImage.fromRegistry("amazon/amazon-ecs-sample"))
-//                        .build())
-//                .publicLoadBalancer(true)
-//                .build();
-
         ApplicationLoadBalancedFargateService.Builder.create(this, "MyWebServer")
                 .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder()
                         .image(ContainerImage.fromEcrRepository(Repository.fromRepositoryName(
@@ -34,8 +27,8 @@ public class HelloEcsStack extends Stack {
 //                        .containerPort(8080)
                         .build())
                 .publicLoadBalancer(true)
-                .cpu(1024)
-                .memoryLimitMiB(4096)
+                .cpu(256)
+                .memoryLimitMiB(1024)
                 .build();
     }
 }
