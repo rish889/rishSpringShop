@@ -1,4 +1,8 @@
-# DOCKER_BUILDKIT=1 docker build -f ./DockerfileMain -t rish889/rish-spring-shop:0.0.1-SNAPSHOT .
+# DOCKER_BUILDKIT=1 docker build -f ./DockerfileMain -t 561375666658.dkr.ecr.us-east-1.amazonaws.com/rish-spring-shop:0.0.1-SNAPSHOT .
+# docker push 561375666658.dkr.ecr.us-east-1.amazonaws.com/rish-spring-shop:0.0.1-SNAPSHOT
+
+# aws-vault exec rish889IAM --duration=12h
+# $(aws ecr get-login --no-include-email --region us-east-1)
 # docker run -p 8080:8080 -t rish889/rish-spring-shop:0.0.1-SNAPSHOT
 
 FROM maven:3.8.6-openjdk-18 as maven_build
