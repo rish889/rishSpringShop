@@ -17,14 +17,13 @@ public class HelloEcsStack extends Stack {
     public HelloEcsStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
-        ApplicationLoadBalancedFargateService.Builder.create(this, "MyWebServer")
+        ApplicationLoadBalancedFargateService.Builder.create(this, "HelloService")
                 .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder()
                         .image(ContainerImage.fromEcrRepository(Repository.fromRepositoryName(
                                 this,
                                 "RishSpringShopRepository",
                                 "rish-spring-shop")))
                         .containerPort(80)
-//                        .containerPort(8080)
                         .build())
                 .publicLoadBalancer(true)
                 .cpu(256)
@@ -32,5 +31,3 @@ public class HelloEcsStack extends Stack {
                 .build();
     }
 }
-
-//561375666658.dkr.ecr.us-east-1.amazonaws.com/rish-spring-shop
