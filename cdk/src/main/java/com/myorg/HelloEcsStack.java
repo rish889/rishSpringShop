@@ -28,7 +28,7 @@ public class HelloEcsStack extends Stack {
                         .build())
                 .publicLoadBalancer(true)
                 .cpu(256)
-                .memoryLimitMiB(1024)
+                .memoryLimitMiB(512)
                 .build();
     }
 }
