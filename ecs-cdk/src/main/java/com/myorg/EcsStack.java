@@ -17,7 +17,7 @@ public class EcsStack extends Stack {
     public EcsStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
-        ApplicationLoadBalancedFargateService.Builder.create(this, "HelloService")
+        ApplicationLoadBalancedFargateService service = ApplicationLoadBalancedFargateService.Builder.create(this, "HelloService")
                 .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder()
                         .image(ContainerImage.fromEcrRepository(Repository.fromRepositoryName(
                                 this,
