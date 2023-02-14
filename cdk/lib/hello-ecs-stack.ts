@@ -8,7 +8,7 @@ export class HelloEcsStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    new ecsp.ApplicationLoadBalancedFargateService(this, 'MyWebServer', {
+    new ecsp.ApplicationLoadBalancedFargateService(this, 'ProductService', {
       taskImageOptions: {
         image: ecs.ContainerImage.fromEcrRepository(
           ecr.Repository.fromRepositoryName(
