@@ -22,7 +22,7 @@ public class EcsStack extends Stack {
                         .image(ContainerImage.fromEcrRepository(Repository.fromRepositoryName(
                                 this,
                                 "RishSpringShopRepository",
-                                "rish-spring-shop")))
+                                "rish-spring-shop-product-service")))
                         .containerPort(80)
                         .build())
                 .publicLoadBalancer(true)
