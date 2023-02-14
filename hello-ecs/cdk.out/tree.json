@@ -8,6 +8,14 @@
         "id": "HelloEcsStack",
         "path": "HelloEcsStack",
         "children": {
+          "RishSpringShopRepository": {
+            "id": "RishSpringShopRepository",
+            "path": "HelloEcsStack/RishSpringShopRepository",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ecr.RepositoryBase",
+              "version": "2.64.0"
+            }
+          },
           "MyWebServer": {
             "id": "MyWebServer",
             "path": "HelloEcsStack/MyWebServer",
@@ -267,7 +275,25 @@
                         "containerDefinitions": [
                           {
                             "essential": true,
-                            "image": "amazon/amazon-ecs-sample",
+                            "image": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  {
+                                    "Ref": "AWS::AccountId"
+                                  },
+                                  ".dkr.ecr.",
+                                  {
+                                    "Ref": "AWS::Region"
+                                  },
+                                  ".",
+                                  {
+                                    "Ref": "AWS::URLSuffix"
+                                  },
+                                  "/rish-spring-shop-product-service:latest"
+                                ]
+                              ]
+                            },
                             "name": "web",
                             "portMappings": [
                               {
@@ -396,6 +422,39 @@
                               "aws:cdk:cloudformation:props": {
                                 "policyDocument": {
                                   "Statement": [
+                                    {
+                                      "Action": [
+                                        "ecr:BatchCheckLayerAvailability",
+                                        "ecr:BatchGetImage",
+                                        "ecr:GetDownloadUrlForLayer"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": {
+                                        "Fn::Join": [
+                                          "",
+                                          [
+                                            "arn:",
+                                            {
+                                              "Ref": "AWS::Partition"
+                                            },
+                                            ":ecr:",
+                                            {
+                                              "Ref": "AWS::Region"
+                                            },
+                                            ":",
+                                            {
+                                              "Ref": "AWS::AccountId"
+                                            },
+                                            ":repository/rish-spring-shop-product-service"
+                                          ]
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "Action": "ecr:GetAuthorizationToken",
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    },
                                     {
                                       "Action": [
                                         "logs:CreateLogStream",

@@ -150,7 +150,25 @@
     "ContainerDefinitions": [
      {
       "Essential": true,
-      "Image": "amazon/amazon-ecs-sample",
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         {
+          "Ref": "AWS::AccountId"
+         },
+         ".dkr.ecr.",
+         {
+          "Ref": "AWS::Region"
+         },
+         ".",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/rish-spring-shop-product-service:latest"
+        ]
+       ]
+      },
       "LogConfiguration": {
        "LogDriver": "awslogs",
        "Options": {
@@ -229,6 +247,39 @@
    "Properties": {
     "PolicyDocument": {
      "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":ecr:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":repository/rish-spring-shop-product-service"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
       {
        "Action": [
         "logs:CreateLogStream",
@@ -823,7 +874,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31Ry27CMBD8Fu7GLQjRM6UUIaE2ShBX5DhLuhDsyF6DUJR/r/MgpLTqybPjSXY8M+bTCX8eiIsdyuQ4zDDmRURCHpmndgVIu8sFERhl+SzPM5SCUKu1FsmryISSkLwLkwqCCMwZJTDIhCWUmVfEtQJVeh7z4u+vDZvvf859HVoC1WpuuHe/8ZuBlka7vJL0xpKB9DsjkM4gXTvJ/8QiNWDtL3qlGn6by+puG8xZ4GJvInKxAqr1HQq1I9iIOIM7f+dm1mqJtflOXIHFKqiOD0FLH+VFXFlg8Fyl2v14paoWoBM0TtppRr6zrxMoql5uedGWshH2+AZ7VHhb+choRQJ9rj3uodA6jhZmzrdQ99HCkqE48SLUzXvrM9A+m9pgg0qW6dR7Wuu0y/2Gy7KaPh3ljlgIVjvTrOxjbzKprZVM6QT4wT6dRxM+euHTwcEiDo1ThCfgYXN+A0m+s0PVAgAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31Ry07DMBD8lt5dAxWCc1seqlRBlFZc0cZZwrapHdnroCrKv+M8moaCOO3seOwdz87k3a28nsCXm6p0P80pkdWGQe1FoN4rVFbGWBhHbOxxAQ4FKvdeADNa7eS8KHJSwGT02kC6gBy0wvQJbAaMG7QlqXAlB8ek8qBIWgXprJzJ6u/bViw/fvZjHTlG3WtOeHS+DZORn63xRSMZtXVwHmZuUHlLfBwk/xOPmUXnftEr3fFvhWrO3qKliHwSTGx8opFb/YBi4xm3kOR45s/c3DmjqDU/iBvwuIqa8gL8HKL8gqOILJVNqsPDK91sAQdB56Tv5hzW+HlAzc3Pnaz6pWzB7R/wgzSdRl4yRjNQyHXEXSy0jaOHuQ9baPfRw1oQHGQVm+6/bY1MyKY12KFa5CYLntYmG3I/4bpuulfPhWcRozPediPHOJhMW2u10CZFuXNX5c2tvLmXd5OdI5par5kOKOOufgMkShka6AIAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "HelloEcsStack/CDKMetadata/Default"
