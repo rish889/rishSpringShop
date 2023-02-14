@@ -9,12 +9,12 @@ import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFarga
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskImageOptions;
 import software.constructs.Construct;
 
-public class HelloEcsStack extends Stack {
-    public HelloEcsStack(final Construct scope, final String id) {
+public class EcsStack extends Stack {
+    public EcsStack(final Construct scope, final String id) {
         this(scope, id, null);
     }
 
-    public HelloEcsStack(final Construct scope, final String id, final StackProps props) {
+    public EcsStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
         ApplicationLoadBalancedFargateService.Builder.create(this, "HelloService")

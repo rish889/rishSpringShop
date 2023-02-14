@@ -7,7 +7,7 @@ public class CdkApp {
     public static void main(final String[] args) {
         App app = new App();
 
-        new HelloEcsStack(app, "RishSpringShopStack", StackProps.builder()
+        new EcsStack(app, "RishSpringShopStack", StackProps.builder()
                 .build());
 
         app.synth();
