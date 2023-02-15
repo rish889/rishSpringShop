@@ -460,10 +460,69 @@
     "aws:cdk:path": "rss/vpc/VPCGW"
    }
   },
+  "alb8A8B13C2": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "albSecurityGroup49866104",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Ref": "vpcPublicSubnet1Subnet2E65531E"
+     },
+     {
+      "Ref": "vpcPublicSubnet2Subnet009B674F"
+     }
+    ],
+    "Type": "application"
+   },
+   "DependsOn": [
+    "vpcPublicSubnet1DefaultRoute10708846",
+    "vpcPublicSubnet1RouteTableAssociation5D3F4579",
+    "vpcPublicSubnet2DefaultRouteA1EC0F60",
+    "vpcPublicSubnet2RouteTableAssociation21F81B59"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "rss/alb/Resource"
+   }
+  },
+  "albSecurityGroup49866104": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Automatically created Security Group for ELB rssalb863941D5",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "255.255.255.255/32",
+      "Description": "Disallow all traffic",
+      "FromPort": 252,
+      "IpProtocol": "icmp",
+      "ToPort": 86
+     }
+    ],
+    "VpcId": {
+     "Ref": "vpcA2121C38"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/alb/SecurityGroup/Resource"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OzQrCMBCEn8V7GrWIeC1FRA9SWvEqm7jiaptIsmkR6bvb+ldP8+0wzE4s5zM5GUHjI328RiUp+SgY9FV01gF1LB/7mxbpyeyzVGRBlaSLoAxy7w2U28C4A1Xi4A9e4r3VBEzW/MI9LNdZL1vgFTA2cBeZo7rDoXhtGF3H38B7yedKuJt6rtBwK3L0Njj96v3n1Joj9Z9bsYEaxtOFnMhYTkcXTxS5YJgqlPlbn4DwA9EPAQAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02PQWvDMAyFf0vvjteGMnbNwigdZYRk9DoUR920unaw5ZQS8t/npNuSk54+SY+nVD5u5XoFV5+o5pxoqmVfMaiziOijR5XK/tgqkZ/MschFEWpNqgq1QR7ZrEobGN+h1jjzmWXeW0XAZM3/8ihe9sVY3oB3wHiFmygcdVHOxnvD6KL+W7gn+e0yjlm/LmhYVKiCI77tnA3tlGEJBoEaPJPSFpoaNBhF5rOL32VtG1+aoh3i7HmaoRsdlv0wiBK9DU5NwZc6t6ah8X4Qr9DBw+ZJrmUqN6tvT5S4YJguKMt7/QEA7WTbcQEAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "rss/CDKMetadata/Default"
