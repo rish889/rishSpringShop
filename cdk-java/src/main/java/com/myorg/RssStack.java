@@ -150,7 +150,7 @@ public class RssStack extends Stack {
                 .instanceIdentifier(id + "-rds")
                 .removalPolicy(RemovalPolicy.DESTROY)
 //                .credentials(Credentials.fromGeneratedSecret("postgres"))
-                .credentials(Credentials.fromPassword("postgres", SecretValue.Builder.create("postgres@123").build()))
+                .credentials(Credentials.fromPassword("postgres", SecretValue.Builder.create("postgres").build()))
                 .databaseName("product_service")
                 .build();
 
