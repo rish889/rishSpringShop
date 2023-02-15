@@ -14,8 +14,8 @@ public class CdkApp {
 //                "RssRdsStack",
 //                StackProps.builder().build());
 
-        new RssRdsStack2(app,
-                "RssRdsStack2",
+        new RssRdsStack(app,
+                "RssRdsStack",
                 StackProps.builder().build());
 
         app.synth();
