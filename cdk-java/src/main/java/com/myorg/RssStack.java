@@ -10,13 +10,15 @@ import software.amazon.awscdk.services.ecr.Repository;
 import software.amazon.awscdk.services.ecs.ContainerImage;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateService;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskImageOptions;
-import software.amazon.awscdk.services.elasticloadbalancingv2.*;
 import software.amazon.awscdk.services.elasticloadbalancingv2.Protocol;
+import software.amazon.awscdk.services.elasticloadbalancingv2.*;
 import software.amazon.awscdk.services.rds.*;
 import software.constructs.Construct;
 
+import java.util.HashMap;
 import java.util.Map;
 
+//https://www.gravitywell.co.uk/insights/deploying-applications-to-ecs-fargate-with-aws-cdk/
 public class RssStack extends Stack {
     public RssStack(final Construct scope, final String id) {
         this(scope, id, null);
@@ -24,17 +26,19 @@ public class RssStack extends Stack {
 
     public RssStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
-        final IVpc vpc = createVpc();
-        final ApplicationLoadBalancer alb = createAlb(vpc);
-        final ApplicationTargetGroup targetGroup = createTargetGroup(vpc);
+
+//        final IVpc vpc = createVpc();
+//        final ApplicationLoadBalancer alb = createAlb(vpc);
+//        final ApplicationTargetGroup targetGroup = createTargetGroup(vpc);
 
 
-//        final Map<String, String> environment = new HashMap<>();
-//        environment.put("spring.profiles.active", "dev");
+        final Map<String, String> environment = new HashMap<>();
+        environment.put("spring.profiles.active", "dev");
 //        environment.put("rss.postgres.host", databaseInstance.getDbInstanceEndpointAddress());
-//        final ApplicationLoadBalancedFargateService productService = createProductService(id, environment);
-//        final Instance bastionInstance = createBastion(vpc, id);
-//        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
+        final ApplicationLoadBalancedFargateService productService = createProductService(id, environment);
+        final IVpc vpc = productService.getCluster().getVpc();
+        final Instance bastionInstance = createBastion(vpc, id);
+        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
 
 
     }
