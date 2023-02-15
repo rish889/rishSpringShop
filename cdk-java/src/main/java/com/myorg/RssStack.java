@@ -24,12 +24,10 @@ public class RssStack extends Stack {
 
     public RssStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
-        final Map<String, String> environment = new HashMap<>();
-        environment.put("spring.profiles.active", "dev");
-        //        environment.put("rss.postgres.host", databaseInstance.getDbInstanceEndpointAddress());
-
-        final ApplicationLoadBalancedFargateService productService = createProductService(id, environment);
-        System.out.println(productService);
+//        final Map<String, String> environment = new HashMap<>();
+//        environment.put("spring.profiles.active", "dev");
+//        environment.put("rss.postgres.host", databaseInstance.getDbInstanceEndpointAddress());
+//        final ApplicationLoadBalancedFargateService productService = createProductService(id, environment);
 //        final IVpc vpc = productService.getService().getCluster().getVpc();
 //        final Instance bastionInstance = createBastion(vpc, id);
 //        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
