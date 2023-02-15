@@ -14,6 +14,8 @@ import software.amazon.awscdk.services.rds.*;
 import software.constructs.Construct;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RssStack extends Stack {
     public RssStack(final Construct scope, final String id) {
@@ -24,12 +26,14 @@ public class RssStack extends Stack {
         super(scope, id, props);
 
         final ApplicationLoadBalancedFargateService productService = createProductService(id);
-        final IVpc vpc = productService.getService().getCluster().getVpc();
-        final Instance bastionInstance = createBastion(vpc, id);
-        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
+//        final IVpc vpc = productService.getService().getCluster().getVpc();
+//        final Instance bastionInstance = createBastion(vpc, id);
+//        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
     }
 
     private ApplicationLoadBalancedFargateService createProductService(String id) {
+        final Map<String, String> environment = new HashMap<>();
+        environment.put("spring.profiles.active", "dev");
         ApplicationLoadBalancedFargateService productService = ApplicationLoadBalancedFargateService
                 .Builder
                 .create(this, "product-service")
@@ -39,6 +43,7 @@ public class RssStack extends Stack {
                                 "rss-product-service-repository",
                                 "rish-spring-shop-product-service")))
                         .containerPort(80)
+                        .environment(environment)
                         .build())
                 .publicLoadBalancer(true)
                 .cpu(256)
