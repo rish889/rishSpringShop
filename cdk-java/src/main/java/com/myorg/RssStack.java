@@ -2,6 +2,7 @@
 package com.myorg;
 
 import software.amazon.awscdk.RemovalPolicy;
+import software.amazon.awscdk.SecretValue;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.ec2.*;
@@ -90,8 +91,9 @@ public class RssStack extends Stack {
                 .engine(instanceEngine)
                 .instanceIdentifier(id + "-rds")
                 .removalPolicy(RemovalPolicy.DESTROY)
-                .credentials(Credentials.fromGeneratedSecret("postgres"))
-                .databaseName("todosdb")
+//                .credentials(Credentials.fromGeneratedSecret("postgres"))
+                .credentials(Credentials.fromPassword("postgres", SecretValue.Builder.create("postgres@123").build()))
+                .databaseName("product-service")
                 .build();
 
         databaseInstance.getConnections().allowFrom(bastionInstance, Port.tcp(5432));
