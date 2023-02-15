@@ -30,13 +30,7 @@ public class RssStack extends Stack {
         final IVpc vpc = createVpc();
         final ApplicationLoadBalancer alb = createAlb(vpc);
         final ApplicationTargetGroup targetGroup = createTargetGroup(vpc);
-        final ApplicationListener applicationListener = alb.addListener("alb-listener", ApplicationListenerProps.builder()
-                .open(true)
-                .port(80)
-                .protocol(ApplicationProtocol.HTTP)
-                .loadBalancer(alb)
-                .defaultTargetGroups(Arrays.asList(targetGroup))
-                .build());
+        final ApplicationListener applicationListener = createApplicationListener(alb, targetGroup);
 
 
 //        final Map<String, String> environment = new HashMap<>();
@@ -47,7 +41,6 @@ public class RssStack extends Stack {
 //        final Instance bastionInstance = createBastion(vpc, id);
 //        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
     }
-
 
     private ApplicationLoadBalancedFargateService createProductService(String id, final Map<String, String> environment) {
 
@@ -92,6 +85,16 @@ public class RssStack extends Stack {
                 .targetType(TargetType.IP)
                 .healthCheck(HealthCheck.builder().path("/").protocol(Protocol.HTTP).build())
                 .build();
+    }
+
+    private ApplicationListener createApplicationListener(ApplicationLoadBalancer alb, ApplicationTargetGroup targetGroup) {
+        return alb.addListener("alb-listener", ApplicationListenerProps.builder()
+                .open(true)
+                .port(80)
+                .protocol(ApplicationProtocol.HTTP)
+                .loadBalancer(alb)
+                .defaultTargetGroups(Arrays.asList(targetGroup))
+                .build());
     }
 
     private Instance createBastion(final IVpc vpc, final String id) {
