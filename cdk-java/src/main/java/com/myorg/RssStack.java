@@ -22,17 +22,17 @@ public class RssStack extends Stack {
     public RssStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
-        final Vpc vpc = createVpc();
-        final ApplicationLoadBalancedFargateService productService = createProductService(vpc, id);
-//        final Instance bastionInstance = createBastion(vpc, id);
-//        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id);
+//        final Vpc vpc = createVpc();
+        final ApplicationLoadBalancedFargateService productService = createProductService(id);
+        final IVpc vpc = productService.getService().getCluster().getVpc();
+        final Instance bastionInstance = createBastion(vpc, id);
+        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id);
     }
 
-    private ApplicationLoadBalancedFargateService createProductService(Vpc vpc, String id) {
+    private ApplicationLoadBalancedFargateService createProductService(String id) {
         ApplicationLoadBalancedFargateService productService = ApplicationLoadBalancedFargateService
                 .Builder
                 .create(this, "product-service")
-                .vpc(vpc)
                 .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder()
                         .image(ContainerImage.fromEcrRepository(Repository.fromRepositoryName(
                                 this,
@@ -58,7 +58,7 @@ public class RssStack extends Stack {
                 .build();
     }
 
-    private Instance createBastion(final Vpc vpc, final String id) {
+    private Instance createBastion(final IVpc vpc, final String id) {
         final SecurityGroup bastionSecurityGroup = SecurityGroup.Builder.create(this, "bastion-sg").vpc(vpc).build();
         bastionSecurityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(22), "allow SSH connections from anywhere");
 
@@ -74,7 +74,7 @@ public class RssStack extends Stack {
 
     }
 
-    private DatabaseInstance createRds(Vpc vpc,
+    private DatabaseInstance createRds(IVpc vpc,
                                        Instance bastionInstance,
                                        final String id) {
         final IInstanceEngine instanceEngine = DatabaseInstanceEngine.postgres(
@@ -85,7 +85,7 @@ public class RssStack extends Stack {
 
         final DatabaseInstance databaseInstance = DatabaseInstance.Builder.create(this, id + "-rds")
                 .vpc(vpc)
-                .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PRIVATE_ISOLATED).build())
+                .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PRIVATE_WITH_NAT).build())
                 .instanceType(InstanceType.of(InstanceClass.BURSTABLE3, InstanceSize.MICRO))
                 .engine(instanceEngine)
                 .instanceIdentifier(id + "-rds")
