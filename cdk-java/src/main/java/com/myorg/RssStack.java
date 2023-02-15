@@ -10,10 +10,8 @@ import software.amazon.awscdk.services.ecr.Repository;
 import software.amazon.awscdk.services.ecs.ContainerImage;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateService;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskImageOptions;
-import software.amazon.awscdk.services.elasticloadbalancingv2.ApplicationLoadBalancer;
-import software.amazon.awscdk.services.elasticloadbalancingv2.ApplicationProtocol;
-import software.amazon.awscdk.services.elasticloadbalancingv2.ApplicationTargetGroup;
-import software.amazon.awscdk.services.elasticloadbalancingv2.TargetType;
+import software.amazon.awscdk.services.elasticloadbalancingv2.*;
+import software.amazon.awscdk.services.elasticloadbalancingv2.Protocol;
 import software.amazon.awscdk.services.rds.*;
 import software.constructs.Construct;
 
@@ -83,6 +81,7 @@ public class RssStack extends Stack {
                 .vpc(vpc)
                 .protocol(ApplicationProtocol.HTTP)
                 .targetType(TargetType.IP)
+                .healthCheck(HealthCheck.builder().path("/").protocol(Protocol.HTTP).build())
                 .build();
     }
 
