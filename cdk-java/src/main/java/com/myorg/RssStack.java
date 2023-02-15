@@ -93,7 +93,7 @@ public class RssStack extends Stack {
                 .removalPolicy(RemovalPolicy.DESTROY)
 //                .credentials(Credentials.fromGeneratedSecret("postgres"))
                 .credentials(Credentials.fromPassword("postgres", SecretValue.Builder.create("postgres@123").build()))
-                .databaseName("product-service")
+                .databaseName("product_service")
                 .build();
 
         databaseInstance.getConnections().allowFrom(bastionInstance, Port.tcp(5432));
