@@ -85,7 +85,7 @@ public class RssStack extends Stack {
 
         final DatabaseInstance databaseInstance = DatabaseInstance.Builder.create(this, id + "-rds")
                 .vpc(vpc)
-                .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PRIVATE_WITH_NAT).build())
+//                .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PRIVATE_WITH_NAT).build())
                 .instanceType(InstanceType.of(InstanceClass.BURSTABLE3, InstanceSize.MICRO))
                 .engine(instanceEngine)
                 .instanceIdentifier(id + "-rds")
