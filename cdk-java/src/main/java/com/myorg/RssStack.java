@@ -37,7 +37,7 @@ public class RssStack extends Stack {
                         .image(ContainerImage.fromEcrRepository(Repository.fromRepositoryName(
                                 this,
                                 "rss-product-service-repository",
-                                "rss-product-service-repository")))
+                                "rish-spring-shop-product-service")))
                         .containerPort(80)
                         .build())
                 .publicLoadBalancer(true)
