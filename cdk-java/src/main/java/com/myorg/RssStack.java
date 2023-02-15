@@ -27,11 +27,8 @@ public class RssStack extends Stack {
         final IVpc vpc = createVpc();
         final Instance bastionInstance = createBastion(vpc, id);
         final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id);
+        final ApplicationLoadBalancedFargateService productService = createProductService(id, vpc, databaseInstance);
 
-        final Map<String, String> environment = new HashMap<>();
-        environment.put("spring.profiles.active", "dev");
-        environment.put("rss.postgres.host", databaseInstance.getDbInstanceEndpointAddress());
-        final ApplicationLoadBalancedFargateService productService = createProductService(id, environment, vpc);
         databaseInstance.getConnections().allowFrom(productService.getService(), Port.tcp(5432));
     }
 
@@ -79,7 +76,10 @@ public class RssStack extends Stack {
         return databaseInstance;
     }
 
-    private ApplicationLoadBalancedFargateService createProductService(String id, final Map<String, String> environment, IVpc vpc) {
+    private ApplicationLoadBalancedFargateService createProductService(String id, IVpc vpc, DatabaseInstance databaseInstance) {
+        final Map<String, String> environment = new HashMap<>();
+        environment.put("spring.profiles.active", "dev");
+        environment.put("rss.postgres.host", databaseInstance.getDbInstanceEndpointAddress());
 
         ApplicationLoadBalancedFargateService productService = ApplicationLoadBalancedFargateService
                 .Builder
