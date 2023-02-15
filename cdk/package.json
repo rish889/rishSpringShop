@@ -2,7 +2,7 @@
   "name": "cdk",
   "version": "0.1.0",
   "bin": {
-    "cdk": "bin/hello-ecs.js"
+    "cdk": "bin/cdk.js"
   },
   "scripts": {
     "build": "tsc",
