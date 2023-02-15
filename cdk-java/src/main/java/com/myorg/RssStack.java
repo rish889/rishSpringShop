@@ -10,16 +10,12 @@ import software.amazon.awscdk.services.ecr.Repository;
 import software.amazon.awscdk.services.ecs.ContainerImage;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateService;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskImageOptions;
-import software.amazon.awscdk.services.elasticloadbalancingv2.Protocol;
-import software.amazon.awscdk.services.elasticloadbalancingv2.*;
 import software.amazon.awscdk.services.rds.*;
 import software.constructs.Construct;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-//https://www.gravitywell.co.uk/insights/deploying-applications-to-ecs-fargate-with-aws-cdk/
 public class RssStack extends Stack {
     public RssStack(final Construct scope, final String id) {
         this(scope, id, null);
@@ -37,84 +33,10 @@ public class RssStack extends Stack {
         environment.put("rss.postgres.host", databaseInstance.getDbInstanceEndpointAddress());
         final ApplicationLoadBalancedFargateService productService = createProductService(id, environment, vpc);
         databaseInstance.getConnections().allowFrom(productService.getService(), Port.tcp(5432));
-
-//        final ApplicationLoadBalancer alb = createAlb(vpc);
-//        final ApplicationTargetGroup targetGroup = createTargetGroup(vpc);
-//        final ApplicationListener applicationListener = createApplicationListener(alb, targetGroup);
-
-//        final Map<String, String> environment = new HashMap<>();
-//        environment.put("spring.profiles.active", "dev");
-//        environment.put("rss.postgres.host", databaseInstance.getDbInstanceEndpointAddress());
-//        final ApplicationLoadBalancedFargateService productService = createProductService(id, environment);
-//        final IVpc vpc = productService.getCluster().getVpc();
-//        final Instance bastionInstance = createBastion(vpc, id);
-//        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
-    }
-
-    private ApplicationLoadBalancedFargateService createProductService(String id, final Map<String, String> environment, IVpc vpc) {
-
-        ApplicationLoadBalancedFargateService productService = ApplicationLoadBalancedFargateService
-                .Builder
-                .create(this, "product-service")
-                .vpc(vpc)
-                .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder()
-                        .image(ContainerImage.fromEcrRepository(Repository.fromRepositoryName(
-                                this,
-                                "rss-product-service-repository",
-                                "rish-spring-shop-product-service")))
-                        .containerPort(80)
-                        .environment(environment)
-                        .build())
-                .publicLoadBalancer(true)
-                .cpu(256)
-                .memoryLimitMiB(512)
-                .build();
-
-        return productService;
     }
 
     private IVpc createVpc() {
         return Vpc.Builder.create(this, "vpc").build();
-    }
-
-    private ApplicationLoadBalancer createAlb(IVpc vpc) {
-        final ApplicationLoadBalancer alb = ApplicationLoadBalancer.Builder
-                .create(this, "alb")
-                .vpc(vpc)
-                .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PUBLIC).build())
-                .internetFacing(true)
-                .build();
-
-        final SecurityGroup securityGroup = SecurityGroup.Builder
-                .create(this, "alb-sg")
-                .vpc(vpc)
-                .allowAllOutbound(true)
-                .build();
-        securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(80));
-        alb.addSecurityGroup(securityGroup);
-
-        return alb;
-    }
-
-    private ApplicationTargetGroup createTargetGroup(IVpc vpc) {
-        return ApplicationTargetGroup.Builder
-                .create(this, "target-group")
-                .port(80)
-                .vpc(vpc)
-                .protocol(ApplicationProtocol.HTTP)
-                .targetType(TargetType.IP)
-                .healthCheck(HealthCheck.builder().path("/").protocol(Protocol.HTTP).build())
-                .build();
-    }
-
-    private ApplicationListener createApplicationListener(ApplicationLoadBalancer alb, ApplicationTargetGroup targetGroup) {
-        return alb.addListener("alb-listener", ApplicationListenerProps.builder()
-                .open(true)
-                .port(80)
-                .protocol(ApplicationProtocol.HTTP)
-                .loadBalancer(alb)
-                .defaultTargetGroups(Arrays.asList(targetGroup))
-                .build());
     }
 
     private Instance createBastion(final IVpc vpc, final String id) {
@@ -144,7 +66,6 @@ public class RssStack extends Stack {
 
         final DatabaseInstance databaseInstance = DatabaseInstance.Builder.create(this, id + "-rds")
                 .vpc(vpc)
-//                .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PRIVATE_WITH_NAT).build())
                 .instanceType(InstanceType.of(InstanceClass.BURSTABLE3, InstanceSize.MICRO))
                 .engine(instanceEngine)
                 .instanceIdentifier(id + "-rds")
@@ -157,6 +78,29 @@ public class RssStack extends Stack {
         databaseInstance.getConnections().allowFrom(bastionInstance, Port.tcp(5432));
         return databaseInstance;
     }
+
+    private ApplicationLoadBalancedFargateService createProductService(String id, final Map<String, String> environment, IVpc vpc) {
+
+        ApplicationLoadBalancedFargateService productService = ApplicationLoadBalancedFargateService
+                .Builder
+                .create(this, "product-service")
+                .vpc(vpc)
+                .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder()
+                        .image(ContainerImage.fromEcrRepository(Repository.fromRepositoryName(
+                                this,
+                                "rss-product-service-repository",
+                                "rish-spring-shop-product-service")))
+                        .containerPort(80)
+                        .environment(environment)
+                        .build())
+                .publicLoadBalancer(true)
+                .cpu(256)
+                .memoryLimitMiB(512)
+                .build();
+
+        return productService;
+    }
+
 
 }
 
