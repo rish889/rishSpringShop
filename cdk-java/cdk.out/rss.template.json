@@ -519,10 +519,30 @@
     "aws:cdk:path": "rss/alb/SecurityGroup/Resource"
    }
   },
+  "targetgroup897B0682": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "Port": 80,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": {
+     "Ref": "vpcA2121C38"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/target-group/Resource"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02PQWvDMAyFf0vvjteGMnbNwigdZYRk9DoUR920unaw5ZQS8t/npNuSk54+SY+nVD5u5XoFV5+o5pxoqmVfMaiziOijR5XK/tgqkZ/MschFEWpNqgq1QR7ZrEobGN+h1jjzmWXeW0XAZM3/8ihe9sVY3oB3wHiFmygcdVHOxnvD6KL+W7gn+e0yjlm/LmhYVKiCI77tnA3tlGEJBoEaPJPSFpoaNBhF5rOL32VtG1+aoh3i7HmaoRsdlv0wiBK9DU5NwZc6t6ah8X4Qr9DBw+ZJrmUqN6tvT5S4YJguKMt7/QEA7WTbcQEAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VP0WrDMAz8lr67XhvG2GsWRukYIySlr0Nx1E6rawdbTikh/z4nXZfsSXens3yXyKdHuVrAxS9VfVpqqmRXMqiTiNJnhyqR3b5RIjuYfZ6JPFSaVBkqgzxoEypsYNxBpXHSJy313ioCJmv+zAN43ebD+ADeAOMFriJ31EY4Hd4aRhfx3XBL8stSjlm/zmhYlKiCI75unA3NmGEu9AI1eCalLdQVaDCKzLGN7dKmiZXGaO9x9zLu0A0X/vGZbwfuGAPdP5rRvhcFehucGuvNcWZNTcPrXrxBCw/rZ7mSiVwvvj3R0gXDdEZZ3OYPm1s3GZcBAAA="
    },
    "Metadata": {
     "aws:cdk:path": "rss/CDKMetadata/Default"
