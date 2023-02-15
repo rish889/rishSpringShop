@@ -151,6 +151,10 @@
      {
       "Environment": [
        {
+        "Name": "spring.profiles.active2",
+        "Value": "dev2"
+       },
+       {
         "Name": "spring.profiles.active",
         "Value": "dev"
        }
