@@ -26,6 +26,7 @@ public class RssStack extends Stack {
         super(scope, id, props);
         final Map<String, String> environment = new HashMap<>();
         environment.put("spring.profiles.active", "dev");
+        environment.put("spring.profiles.active2", "dev2");
 
         final ApplicationLoadBalancedFargateService productService = createProductService(id, environment);
 //        final IVpc vpc = productService.getService().getCluster().getVpc();
