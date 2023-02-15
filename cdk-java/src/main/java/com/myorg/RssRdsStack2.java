@@ -8,6 +8,8 @@ import software.amazon.awscdk.services.ec2.*;
 import software.amazon.awscdk.services.rds.*;
 import software.constructs.Construct;
 
+import java.util.Arrays;
+
 public class RssRdsStack2 extends Stack {
     public RssRdsStack2(final Construct scope, final String id) {
         this(scope, id, null);
@@ -17,6 +19,7 @@ public class RssRdsStack2 extends Stack {
         super(scope, id, props);
 
         final Vpc vpc = Vpc.Builder.create(this, "vpc")
+                .subnetConfiguration(Arrays.asList(SubnetConfiguration.builder().name("isolated-subnet-1").subnetType(SubnetType.PRIVATE_ISOLATED).build()))
                 .build();
 
         final SecurityGroup bastionSecurityGroup = SecurityGroup.Builder.create(this, "bastion-sg").vpc(vpc).build();
@@ -41,7 +44,7 @@ public class RssRdsStack2 extends Stack {
 
         final DatabaseInstance databaseInstance = DatabaseInstance.Builder.create(this, "rds")
                 .vpc(vpc)
-                .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PRIVATE_ISOLATED).build())
+                .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PRIVATE_WITH_NAT).build())
                 .instanceType(InstanceType.of(InstanceClass.BURSTABLE3, InstanceSize.MICRO))
                 .engine(instanceEngine)
                 .instanceIdentifier("rds")
