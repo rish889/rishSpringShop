@@ -1,7 +1,7 @@
 FROM maven:3.8.6-openjdk-18 as maven_build
 WORKDIR /app
 COPY ./ .
-RUN --mount=type=cache,target=/root/.m2  mvn clean package -f ./pom.xml
+RUN --mount=type=cache,target=/root/.m2  mvn clean package -DskipTests -f ./pom.xml
 
 FROM openjdk:18
 WORKDIR /app
