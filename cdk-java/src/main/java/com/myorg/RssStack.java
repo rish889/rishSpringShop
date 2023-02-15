@@ -28,11 +28,12 @@ public class RssStack extends Stack {
         environment.put("spring.profiles.active", "dev");
 
         final ApplicationLoadBalancedFargateService productService = createProductService(id, environment);
-        final IVpc vpc = productService.getService().getCluster().getVpc();
-        final Instance bastionInstance = createBastion(vpc, id);
-        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
+//        final IVpc vpc = productService.getService().getCluster().getVpc();
+//        final Instance bastionInstance = createBastion(vpc, id);
+//        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
 
-        environment.put("rss.postgres.host", databaseInstance.getDbInstanceEndpointAddress());
+//        environment.put("rss.postgres.host", databaseInstance.getDbInstanceEndpointAddress());
+        environment.put("rss.postgres.host", "rishDatabase");
     }
 
     private ApplicationLoadBalancedFargateService createProductService(String id, final Map<String, String> environment) {
