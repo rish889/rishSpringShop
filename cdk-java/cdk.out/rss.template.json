@@ -522,6 +522,8 @@
   "targetgroup897B0682": {
    "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
    "Properties": {
+    "HealthCheckPath": "/",
+    "HealthCheckProtocol": "HTTP",
     "Port": 80,
     "Protocol": "HTTP",
     "TargetGroupAttributes": [
