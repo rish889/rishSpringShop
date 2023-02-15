@@ -61,16 +61,5 @@ public class RssRdsStack2 extends Stack {
     }
 }
 
-// ssh -i "rss-ec2-key-pair.pem" ec2-user@ec2-54-91-169-5.compute-1.amazonaws.com
-// sudo amazon-linux-extras install epel -y
-// sudo amazon-linux-extras install postgresql10 -y
-// sudo yum install postgresql postgresql-server -y
-// psql -p 5432 -h cdk-stack-dbinstance310a317f-2csrotemzsf5.crxx5vnndcda.us-east-1.rds.amazonaws.com -U postgres
-// \l
-// SELECT current_database();
-// \c todosdb
-// CREATE TABLE IF NOT EXISTS todos (todoid SERIAL PRIMARY KEY, text TEXT NOT NULL);
-// INSERT INTO todos (text) VALUES ('Walk the dog');
-// INSERT INTO todos (text) VALUES ('Buy groceries');
-// SELECT * FROM todos;
+
 
