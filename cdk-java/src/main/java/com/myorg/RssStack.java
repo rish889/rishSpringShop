@@ -24,8 +24,8 @@ public class RssStack extends Stack {
 
         final Vpc vpc = createVpc();
         final ApplicationLoadBalancedFargateService productService = createProductService(vpc, id);
-        final Instance bastionInstance = createBastion(vpc, id);
-        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id);
+//        final Instance bastionInstance = createBastion(vpc, id);
+//        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id);
     }
 
     private ApplicationLoadBalancedFargateService createProductService(Vpc vpc, String id) {

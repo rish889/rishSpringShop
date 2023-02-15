@@ -511,7 +511,7 @@
          {
           "Ref": "AWS::URLSuffix"
          },
-         "/rss-product-service-repository:latest"
+         "/rish-spring-shop-product-service:latest"
         ]
        ]
       },
@@ -616,7 +616,7 @@
           {
            "Ref": "AWS::AccountId"
           },
-          ":repository/rss-product-service-repository"
+          ":repository/rish-spring-shop-product-service"
          ]
         ]
        }
