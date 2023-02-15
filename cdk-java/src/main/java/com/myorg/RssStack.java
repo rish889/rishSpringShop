@@ -29,9 +29,14 @@ public class RssStack extends Stack {
         super(scope, id, props);
 
         final IVpc vpc = createVpc();
+        final Instance bastionInstance = createBastion(vpc, id);
+        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id);
+
         final Map<String, String> environment = new HashMap<>();
         environment.put("spring.profiles.active", "dev");
+        environment.put("rss.postgres.host", databaseInstance.getDbInstanceEndpointAddress());
         final ApplicationLoadBalancedFargateService productService = createProductService(id, environment, vpc);
+        databaseInstance.getConnections().allowFrom(productService.getService(), Port.tcp(5432));
 
 //        final ApplicationLoadBalancer alb = createAlb(vpc);
 //        final ApplicationTargetGroup targetGroup = createTargetGroup(vpc);
@@ -130,8 +135,7 @@ public class RssStack extends Stack {
 
     private DatabaseInstance createRds(IVpc vpc,
                                        Instance bastionInstance,
-                                       final String id,
-                                       final ApplicationLoadBalancedFargateService productService) {
+                                       final String id) {
         final IInstanceEngine instanceEngine = DatabaseInstanceEngine.postgres(
                 PostgresInstanceEngineProps.builder()
                         .version(PostgresEngineVersion.VER_13_6)
@@ -151,7 +155,6 @@ public class RssStack extends Stack {
                 .build();
 
         databaseInstance.getConnections().allowFrom(bastionInstance, Port.tcp(5432));
-        databaseInstance.getConnections().allowFrom(productService.getService(), Port.tcp(5432));
         return databaseInstance;
     }
 
