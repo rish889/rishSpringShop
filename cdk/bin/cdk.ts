@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-import 'source-map-support/register';
-import * as cdk from 'aws-cdk-lib';
-import { RishSpringShopStack } from '../lib/rish-spring-shop-stack';
+import * as cdk from "aws-cdk-lib";
+import { CdkStarterStack } from "../lib/cdk-starter-stack";
 
 const app = new cdk.App();
-new RishSpringShopStack(app, 'RishSpringShopStack', {});
+// new RishSpringShopStack(app, 'RishSpringShopStack', {});
+
+new CdkStarterStack(app, "cdk-stack", {});
