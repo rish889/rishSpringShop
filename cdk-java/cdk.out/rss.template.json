@@ -460,6 +460,235 @@
     "aws:cdk:path": "rss/vpc/VPCGW"
    }
   },
+  "bastionsg9F6FB053": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "rss/bastion-sg",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "allow SSH connections from anywhere",
+      "FromPort": 22,
+      "IpProtocol": "tcp",
+      "ToPort": 22
+     }
+    ],
+    "VpcId": {
+     "Ref": "vpcA2121C38"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/bastion-sg/Resource"
+   }
+  },
+  "bastionInstanceRole7BAD4654": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ec2.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "rss/bastion"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/bastion/InstanceRole/Resource"
+   }
+  },
+  "bastionInstanceProfileBF7A08EB": {
+   "Type": "AWS::IAM::InstanceProfile",
+   "Properties": {
+    "Roles": [
+     {
+      "Ref": "bastionInstanceRole7BAD4654"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/bastion/InstanceProfile"
+   }
+  },
+  "bastion34F27305": {
+   "Type": "AWS::EC2::Instance",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "IamInstanceProfile": {
+     "Ref": "bastionInstanceProfileBF7A08EB"
+    },
+    "ImageId": {
+     "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter"
+    },
+    "InstanceType": "t3.micro",
+    "KeyName": "rss-ec2-key-pair",
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "bastionsg9F6FB053",
+       "GroupId"
+      ]
+     }
+    ],
+    "SubnetId": {
+     "Ref": "vpcPublicSubnet1Subnet2E65531E"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "rss/bastion"
+     }
+    ],
+    "UserData": {
+     "Fn::Base64": "#!/bin/bash"
+    }
+   },
+   "DependsOn": [
+    "bastionInstanceRole7BAD4654"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "rss/bastion/Resource"
+   }
+  },
+  "rssrdsSubnetGroupA4682AE4": {
+   "Type": "AWS::RDS::DBSubnetGroup",
+   "Properties": {
+    "DBSubnetGroupDescription": "Subnet group for rss-rds database",
+    "SubnetIds": [
+     {
+      "Ref": "vpcPrivateSubnet1Subnet934893E8"
+     },
+     {
+      "Ref": "vpcPrivateSubnet2Subnet7031C2BA"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/rss-rds/SubnetGroup/Default"
+   }
+  },
+  "rssrdsSecurityGroupA353CAD9": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security group for rss-rds database",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "vpcA2121C38"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/rss-rds/SecurityGroup/Resource"
+   }
+  },
+  "rssrdsSecurityGroupfromrssbastionsg395E93EC543255DA2C9E": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "Description": "from rssbastionsg395E93EC:5432",
+    "FromPort": 5432,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "rssrdsSecurityGroupA353CAD9",
+      "GroupId"
+     ]
+    },
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "bastionsg9F6FB053",
+      "GroupId"
+     ]
+    },
+    "ToPort": 5432
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/rss-rds/SecurityGroup/from rssbastionsg395E93EC:5432"
+   }
+  },
+  "rssrdsSecurityGroupfromrssproductserviceServiceSecurityGroup72D3A5CE543272A9B7DB": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "Description": "from rssproductserviceServiceSecurityGroup72D3A5CE:5432",
+    "FromPort": 5432,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "rssrdsSecurityGroupA353CAD9",
+      "GroupId"
+     ]
+    },
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "productserviceServiceSecurityGroup66BFB566",
+      "GroupId"
+     ]
+    },
+    "ToPort": 5432
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/rss-rds/SecurityGroup/from rssproductserviceServiceSecurityGroup72D3A5CE:5432"
+   }
+  },
+  "rssrds63E2969B": {
+   "Type": "AWS::RDS::DBInstance",
+   "Properties": {
+    "AllocatedStorage": "100",
+    "CopyTagsToSnapshot": true,
+    "DBInstanceClass": "db.t3.micro",
+    "DBInstanceIdentifier": "rss-rds",
+    "DBName": "product_service",
+    "DBSubnetGroupName": {
+     "Ref": "rssrdsSubnetGroupA4682AE4"
+    },
+    "Engine": "postgres",
+    "EngineVersion": "13.6",
+    "MasterUsername": "postgres",
+    "MasterUserPassword": "postgres@123",
+    "StorageType": "gp2",
+    "VPCSecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "rssrdsSecurityGroupA353CAD9",
+       "GroupId"
+      ]
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "rss/rss-rds/Resource"
+   }
+  },
   "productserviceLBFE39C8A8": {
    "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
    "Properties": {
@@ -613,6 +842,15 @@
        {
         "Name": "spring.profiles.active",
         "Value": "dev"
+       },
+       {
+        "Name": "rss.postgres.host",
+        "Value": {
+         "Fn::GetAtt": [
+          "rssrds63E2969B",
+          "Endpoint.Address"
+         ]
+        }
        }
       ],
       "Essential": true,
@@ -880,12 +1118,23 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/32SwU7DMAyGn4V7FmBCiOsYMA1NUHUT18nNTDHrkipxNk1V3500bVkZiJN//3GSz07G8vZGXl3AwY3UZjsqKJPVkkFtRbDWFaqxrN5KJabv+i2ZisRnBamlzzRy451UajzjCrICT/7JmzhnFAGT0d/FjXicJ014AZ4B4wGOIrG0D/J08Fwz2qD7gpakyyYcWD92qFksUXlLfJxZ48vI8K/xmFt07pc919GvBSorUyyNIzb2eA8Og+XWJXCD4+SkLMMkYkcLA5t7KEAr3DyBzRt8tHtSYUsBjkkVoSKLFaTzfRjp37ttg/MjH9aRY9RdTa8H66twc5hS3+wgbZpxsurQVuC2D/hOmvrXOHeMZqBw+sA7aytOrZOFDyyRqpO1INjJKjXtV4gxMQEzvl2ralGYPDAtTP5N3Ou6Fik642170avn0rdfbOAGyE1Eq8Uz7OHy+k5eybG8vvh0RCPrNdMOZdrGL+VnwsvlAgAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/21SXW/bMAz8LX1XtDYYhr0mTVdkKDbDCfpa0DLjcXEkQ6JSBIb/++iv2Gn3xNPpSB4pLfW3r/r+Dt7DwuTHRUmZrncM5qiEeqvRLHX9Whn1eLCvyaNKYlaS2cXMIrfchFIXGfeQlTjxE7cKwRkCJmev4hY8bZM2/AJ+BsZ3uKjE01ngVHhrGb3gUdA7GU4rFq9/TmhZ7dBET3x59i5WnYcbYmsDgzXYl5zwjWprC48hfOKfOrpRBCddp66fcYxjtcS7AwmVOFlR57NHjfJ50PUGGDIIeG3ej3i1u1l/IkZpo9B4nWLlArHzl7WUESq8VcDtcoJeVZW06vb74iBfQ9nm5T/AF+0y0Z9JOmIJgcmUosg6BdniLA/8/2zfmrg5z3UUGO2gGfHsfi+dZ7PMju0wso7B2h7CcYMHsjT+jY+Mswwk1Wfch7G61xpgGcVL52qAjSpdIf1eXHF1M+KmUSkGF31fJAEPJxzSf0euYv+zZxJxk3ceGvUTzvDl4bu+10v9cPc3EC18tEwn1Gkf/wF9t3ETXAMAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "rss/CDKMetadata/Default"
    },
    "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Parameters": {
+  "SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": {
+   "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+   "Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+  },
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
   }
  },
  "Outputs": {
@@ -1106,13 +1355,6 @@
      ]
     }
    ]
-  }
- },
- "Parameters": {
-  "BootstrapVersion": {
-   "Type": "AWS::SSM::Parameter::Value<String>",
-   "Default": "/cdk-bootstrap/hnb659fds/version",
-   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
   }
  },
  "Rules": {
