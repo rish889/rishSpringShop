@@ -18,18 +18,26 @@ public class RssRdsStack extends Stack {
     public RssRdsStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
-        final Vpc vpc = Vpc.Builder.create(this, "vpc")
+        final Vpc vpc = createVpc();
+        final Instance bastionInstance = createBastion(vpc);
+        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance);
+    }
+
+    private Vpc createVpc() {
+        return Vpc.Builder.create(this, "vpc")
                 .subnetConfiguration(Arrays.asList(
                                 SubnetConfiguration.builder().name("public").subnetType(SubnetType.PUBLIC).build(),
                                 SubnetConfiguration.builder().name("isolated").subnetType(SubnetType.PRIVATE_ISOLATED).build()
                         )
                 )
                 .build();
+    }
 
+    private Instance createBastion(final Vpc vpc) {
         final SecurityGroup bastionSecurityGroup = SecurityGroup.Builder.create(this, "bastion-sg").vpc(vpc).build();
         bastionSecurityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(22), "allow SSH connections from anywhere");
 
-        final Instance ec2Instance = Instance.Builder
+        return Instance.Builder
                 .create(this, "bastion")
                 .vpc(vpc)
                 .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PUBLIC).build())
@@ -39,7 +47,9 @@ public class RssRdsStack extends Stack {
                 .keyName("rss-ec2-key-pair")
                 .build();
 
+    }
 
+    private DatabaseInstance createRds(Vpc vpc, Instance bastionInstance) {
         final IInstanceEngine instanceEngine = DatabaseInstanceEngine.postgres(
                 PostgresInstanceEngineProps.builder()
                         .version(PostgresEngineVersion.VER_13_6)
@@ -57,8 +67,10 @@ public class RssRdsStack extends Stack {
                 .databaseName("todosdb")
                 .build();
 
-        databaseInstance.getConnections().allowFrom(ec2Instance, Port.tcp(5432));
+        databaseInstance.getConnections().allowFrom(bastionInstance, Port.tcp(5432));
+        return databaseInstance;
     }
+
 }
 
 
