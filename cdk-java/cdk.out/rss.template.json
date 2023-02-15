@@ -672,7 +672,7 @@
     "Engine": "postgres",
     "EngineVersion": "13.6",
     "MasterUsername": "postgres",
-    "MasterUserPassword": "postgres@123",
+    "MasterUserPassword": "postgres",
     "StorageType": "gp2",
     "VPCSecurityGroups": [
      {
