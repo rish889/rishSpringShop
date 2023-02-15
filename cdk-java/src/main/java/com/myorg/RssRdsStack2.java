@@ -19,8 +19,11 @@ public class RssRdsStack2 extends Stack {
         super(scope, id, props);
 
         final Vpc vpc = Vpc.Builder.create(this, "vpc")
-                .subnetConfiguration(Arrays.asList(SubnetConfiguration.builder().name("public-subnet-1").subnetType(SubnetType.PUBLIC).build()))
-                .subnetConfiguration(Arrays.asList(SubnetConfiguration.builder().name("isolated-subnet-1").subnetType(SubnetType.PRIVATE_ISOLATED).build()))
+                .subnetConfiguration(Arrays.asList(
+                                SubnetConfiguration.builder().name("public-subnet-1").subnetType(SubnetType.PUBLIC).build(),
+                                SubnetConfiguration.builder().name("isolated-subnet-1").subnetType(SubnetType.PRIVATE_ISOLATED).build()
+                        )
+                )
                 .build();
 
         final SecurityGroup bastionSecurityGroup = SecurityGroup.Builder.create(this, "bastion-sg").vpc(vpc).build();
