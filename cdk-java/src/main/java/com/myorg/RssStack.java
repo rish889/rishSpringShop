@@ -23,7 +23,7 @@ public class RssStack extends Stack {
         super(scope, id, props);
 
         final Vpc vpc = createVpc();
-        final ApplicationLoadBalancedFargateService productService = createProductService(vpc, id);
+//        final ApplicationLoadBalancedFargateService productService = createProductService(vpc, id);
         final Instance bastionInstance = createBastion(vpc, id);
         final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id);
     }
