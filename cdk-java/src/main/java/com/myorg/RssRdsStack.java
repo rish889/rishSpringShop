@@ -20,8 +20,8 @@ public class RssRdsStack extends Stack {
 
         final Vpc vpc = Vpc.Builder.create(this, "vpc")
                 .subnetConfiguration(Arrays.asList(
-                                SubnetConfiguration.builder().name("public-subnet-1").subnetType(SubnetType.PUBLIC).build(),
-                                SubnetConfiguration.builder().name("isolated-subnet-1").subnetType(SubnetType.PRIVATE_ISOLATED).build()
+                                SubnetConfiguration.builder().name("public").subnetType(SubnetType.PUBLIC).build(),
+                                SubnetConfiguration.builder().name("isolated").subnetType(SubnetType.PRIVATE_ISOLATED).build()
                         )
                 )
                 .build();
@@ -46,12 +46,12 @@ public class RssRdsStack extends Stack {
                         .build()
         );
 
-        final DatabaseInstance databaseInstance = DatabaseInstance.Builder.create(this, "rds")
+        final DatabaseInstance databaseInstance = DatabaseInstance.Builder.create(this, "rss-rds")
                 .vpc(vpc)
                 .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PRIVATE_ISOLATED).build())
                 .instanceType(InstanceType.of(InstanceClass.BURSTABLE3, InstanceSize.MICRO))
                 .engine(instanceEngine)
-                .instanceIdentifier("rds")
+                .instanceIdentifier("rss-rds")
                 .removalPolicy(RemovalPolicy.DESTROY)
                 .credentials(Credentials.fromGeneratedSecret("postgres"))
                 .databaseName("todosdb")
