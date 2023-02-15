@@ -10,17 +10,17 @@ import software.constructs.Construct;
 
 import java.util.Arrays;
 
-public class RssRdsStack extends Stack {
-    public RssRdsStack(final Construct scope, final String id) {
+public class RssStack extends Stack {
+    public RssStack(final Construct scope, final String id) {
         this(scope, id, null);
     }
 
-    public RssRdsStack(final Construct scope, final String id, final StackProps props) {
+    public RssStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
         final Vpc vpc = createVpc();
-        final Instance bastionInstance = createBastion(vpc);
-        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance);
+        final Instance bastionInstance = createBastion(vpc, id);
+        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id);
     }
 
     private Vpc createVpc() {
@@ -33,7 +33,7 @@ public class RssRdsStack extends Stack {
                 .build();
     }
 
-    private Instance createBastion(final Vpc vpc) {
+    private Instance createBastion(final Vpc vpc, final String id) {
         final SecurityGroup bastionSecurityGroup = SecurityGroup.Builder.create(this, "bastion-sg").vpc(vpc).build();
         bastionSecurityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(22), "allow SSH connections from anywhere");
 
@@ -44,24 +44,24 @@ public class RssRdsStack extends Stack {
                 .securityGroup(bastionSecurityGroup)
                 .instanceType(InstanceType.of(InstanceClass.BURSTABLE3, InstanceSize.MICRO))
                 .machineImage(AmazonLinuxImage.Builder.create().generation(AmazonLinuxGeneration.AMAZON_LINUX_2).build())
-                .keyName("rss-ec2-key-pair")
+                .keyName(id + "-ec2-key-pair")
                 .build();
 
     }
 
-    private DatabaseInstance createRds(Vpc vpc, Instance bastionInstance) {
+    private DatabaseInstance createRds(Vpc vpc, Instance bastionInstance, final String id) {
         final IInstanceEngine instanceEngine = DatabaseInstanceEngine.postgres(
                 PostgresInstanceEngineProps.builder()
                         .version(PostgresEngineVersion.VER_13_6)
                         .build()
         );
 
-        final DatabaseInstance databaseInstance = DatabaseInstance.Builder.create(this, "rss-rds")
+        final DatabaseInstance databaseInstance = DatabaseInstance.Builder.create(this, id + "-rds")
                 .vpc(vpc)
                 .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PRIVATE_ISOLATED).build())
                 .instanceType(InstanceType.of(InstanceClass.BURSTABLE3, InstanceSize.MICRO))
                 .engine(instanceEngine)
-                .instanceIdentifier("rss-rds")
+                .instanceIdentifier(id + "-rds")
                 .removalPolicy(RemovalPolicy.DESTROY)
                 .credentials(Credentials.fromGeneratedSecret("postgres"))
                 .databaseName("todosdb")
