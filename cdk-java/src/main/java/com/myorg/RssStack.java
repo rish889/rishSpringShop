@@ -74,12 +74,12 @@ public class RssStack extends Stack {
                 .internetFacing(true)
                 .build();
 
-        final SecurityGroup securityGroup = SecurityGroup.Builder
-                .create(this, "alb-sg")
-                .vpc(vpc)
-                .allowAllOutbound(true)
-                .build();
-        alb.addSecurityGroup(securityGroup);
+//        final SecurityGroup securityGroup = SecurityGroup.Builder
+//                .create(this, "alb-sg")
+//                .vpc(vpc)
+//                .allowAllOutbound(true)
+//                .build();
+//        alb.addSecurityGroup(securityGroup);
 
         return alb;
     }
