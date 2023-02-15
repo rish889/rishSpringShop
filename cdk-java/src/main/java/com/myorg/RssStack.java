@@ -29,6 +29,10 @@ public class RssStack extends Stack {
         final IVpc vpc = createVpc();
         final ApplicationLoadBalancer alb = createAlb(vpc);
         final ApplicationTargetGroup targetGroup = createTargetGroup(vpc);
+        final ApplicationListener applicationListener = alb.addListener("alb-listener", ApplicationListenerProps.builder()
+                .open(true)
+                .port(80)
+                .protocol(ApplicationProtocol.HTTP).build());
 
 
 //        final Map<String, String> environment = new HashMap<>();
