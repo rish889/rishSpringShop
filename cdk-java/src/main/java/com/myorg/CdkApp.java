@@ -7,8 +7,11 @@ public class CdkApp {
     public static void main(final String[] args) {
         App app = new App();
 
-        new EcsStack(app,
-                "RishSpringShopStack",
+//        new EcsStack(app,
+//                "RishSpringShopStack",
+//                StackProps.builder().build());
+        new RssRdsStack(app,
+                "RssRdsStack",
                 StackProps.builder().build());
 
         app.synth();
