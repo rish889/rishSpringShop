@@ -11,6 +11,9 @@ import software.amazon.awscdk.services.ecs.ContainerImage;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateService;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskImageOptions;
 import software.amazon.awscdk.services.elasticloadbalancingv2.ApplicationLoadBalancer;
+import software.amazon.awscdk.services.elasticloadbalancingv2.ApplicationProtocol;
+import software.amazon.awscdk.services.elasticloadbalancingv2.ApplicationTargetGroup;
+import software.amazon.awscdk.services.elasticloadbalancingv2.TargetType;
 import software.amazon.awscdk.services.rds.*;
 import software.constructs.Construct;
 
@@ -25,6 +28,7 @@ public class RssStack extends Stack {
         super(scope, id, props);
         final IVpc vpc = createVpc();
         final ApplicationLoadBalancer alb = createAlb(vpc);
+        final ApplicationTargetGroup targetGroup = createTargetGroup(vpc);
 
 
 //        final Map<String, String> environment = new HashMap<>();
@@ -36,6 +40,7 @@ public class RssStack extends Stack {
 
 
     }
+
 
     private ApplicationLoadBalancedFargateService createProductService(String id, final Map<String, String> environment) {
 
@@ -68,6 +73,16 @@ public class RssStack extends Stack {
                 .vpc(vpc)
                 .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PUBLIC).build())
                 .internetFacing(true)
+                .build();
+    }
+
+    private ApplicationTargetGroup createTargetGroup(IVpc vpc) {
+        return ApplicationTargetGroup.Builder
+                .create(this, "target-group")
+                .port(80)
+                .vpc(vpc)
+                .protocol(ApplicationProtocol.HTTP)
+                .targetType(TargetType.IP)
                 .build();
     }
 
