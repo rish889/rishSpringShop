@@ -14,7 +14,6 @@ import software.amazon.awscdk.services.rds.*;
 import software.constructs.Construct;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 public class RssStack extends Stack {
@@ -24,11 +23,12 @@ public class RssStack extends Stack {
 
     public RssStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
+        final IVpc vpc = createVpc();
+
 //        final Map<String, String> environment = new HashMap<>();
 //        environment.put("spring.profiles.active", "dev");
 //        environment.put("rss.postgres.host", databaseInstance.getDbInstanceEndpointAddress());
 //        final ApplicationLoadBalancedFargateService productService = createProductService(id, environment);
-//        final IVpc vpc = productService.getService().getCluster().getVpc();
 //        final Instance bastionInstance = createBastion(vpc, id);
 //        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
 
@@ -57,14 +57,8 @@ public class RssStack extends Stack {
         return productService;
     }
 
-    private Vpc createVpc() {
-        return Vpc.Builder.create(this, "vpc")
-                .subnetConfiguration(Arrays.asList(
-                                SubnetConfiguration.builder().name("public").subnetType(SubnetType.PUBLIC).build(),
-                                SubnetConfiguration.builder().name("isolated").subnetType(SubnetType.PRIVATE_ISOLATED).build()
-                        )
-                )
-                .build();
+    private IVpc createVpc() {
+        return Vpc.Builder.create(this, "vpc").build();
     }
 
     private Instance createBastion(final IVpc vpc, final String id) {
