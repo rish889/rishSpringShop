@@ -19,7 +19,7 @@ public class RssRdsStack2 extends Stack {
         final Vpc vpc = Vpc.Builder.create(this, "vpc")
                 .build();
 
-        final SecurityGroup bastionSecurityGroup = SecurityGroup.Builder.create(this, "bastion").build();
+        final SecurityGroup bastionSecurityGroup = SecurityGroup.Builder.create(this, "bastion").vpc(vpc).build();
         bastionSecurityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(22), "allow SSH connections from anywhere");
 
         final Instance ec2Instance = Instance.Builder
