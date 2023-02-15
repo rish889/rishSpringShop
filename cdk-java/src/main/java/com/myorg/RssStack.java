@@ -16,6 +16,7 @@ import software.amazon.awscdk.services.rds.*;
 import software.constructs.Construct;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 //https://www.gravitywell.co.uk/insights/deploying-applications-to-ecs-fargate-with-aws-cdk/
@@ -28,9 +29,13 @@ public class RssStack extends Stack {
         super(scope, id, props);
 
         final IVpc vpc = createVpc();
-        final ApplicationLoadBalancer alb = createAlb(vpc);
-        final ApplicationTargetGroup targetGroup = createTargetGroup(vpc);
-        final ApplicationListener applicationListener = createApplicationListener(alb, targetGroup);
+        final Map<String, String> environment = new HashMap<>();
+        environment.put("spring.profiles.active", "dev");
+        final ApplicationLoadBalancedFargateService productService = createProductService(id, environment, vpc);
+
+//        final ApplicationLoadBalancer alb = createAlb(vpc);
+//        final ApplicationTargetGroup targetGroup = createTargetGroup(vpc);
+//        final ApplicationListener applicationListener = createApplicationListener(alb, targetGroup);
 
 //        final Map<String, String> environment = new HashMap<>();
 //        environment.put("spring.profiles.active", "dev");
@@ -41,11 +46,12 @@ public class RssStack extends Stack {
 //        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
     }
 
-    private ApplicationLoadBalancedFargateService createProductService(String id, final Map<String, String> environment) {
+    private ApplicationLoadBalancedFargateService createProductService(String id, final Map<String, String> environment, IVpc vpc) {
 
         ApplicationLoadBalancedFargateService productService = ApplicationLoadBalancedFargateService
                 .Builder
                 .create(this, "product-service")
+                .vpc(vpc)
                 .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder()
                         .image(ContainerImage.fromEcrRepository(Repository.fromRepositoryName(
                                 this,
