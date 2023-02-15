@@ -22,11 +22,10 @@ public class RssStack extends Stack {
     public RssStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
-//        final Vpc vpc = createVpc();
         final ApplicationLoadBalancedFargateService productService = createProductService(id);
         final IVpc vpc = productService.getService().getCluster().getVpc();
         final Instance bastionInstance = createBastion(vpc, id);
-        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id);
+        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
     }
 
     private ApplicationLoadBalancedFargateService createProductService(String id) {
@@ -76,7 +75,8 @@ public class RssStack extends Stack {
 
     private DatabaseInstance createRds(IVpc vpc,
                                        Instance bastionInstance,
-                                       final String id) {
+                                       final String id,
+                                       final ApplicationLoadBalancedFargateService productService) {
         final IInstanceEngine instanceEngine = DatabaseInstanceEngine.postgres(
                 PostgresInstanceEngineProps.builder()
                         .version(PostgresEngineVersion.VER_13_6)
