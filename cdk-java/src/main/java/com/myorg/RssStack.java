@@ -31,28 +31,6 @@ public class RssStack extends Stack {
         final ApplicationLoadBalancer alb = createAlb(vpc);
         final ApplicationTargetGroup targetGroup = createTargetGroup(vpc);
         final ApplicationListener applicationListener = createApplicationListener(alb, targetGroup);
-        final SecurityGroup securityGroup = SecurityGroup.Builder
-                .create(this, "alb-sg")
-                .vpc(vpc)
-                .allowAllOutbound(true)
-                .build();
-        alb.addSecurityGroup(securityGroup);
-
-
-// use a security group to provide a secure connection between the ALB and the containers
-//const albSG = new ec2.SecurityGroup(this, "alb-SG", {
-//                vpc,
-//                allowAllOutbound: true,
-//});
-//
-//        albSG.addIngressRule(
-//                ec2.Peer.anyIpv4(),
-//                ec2.Port.tcp(443),
-//                "Allow https traffic"
-//        );
-//
-//        alb.addSecurityGroup(albSG);
-
 
 //        final Map<String, String> environment = new HashMap<>();
 //        environment.put("spring.profiles.active", "dev");
@@ -89,12 +67,21 @@ public class RssStack extends Stack {
     }
 
     private ApplicationLoadBalancer createAlb(IVpc vpc) {
-        return ApplicationLoadBalancer.Builder
+        final ApplicationLoadBalancer alb = ApplicationLoadBalancer.Builder
                 .create(this, "alb")
                 .vpc(vpc)
                 .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PUBLIC).build())
                 .internetFacing(true)
                 .build();
+
+        final SecurityGroup securityGroup = SecurityGroup.Builder
+                .create(this, "alb-sg")
+                .vpc(vpc)
+                .allowAllOutbound(true)
+                .build();
+        alb.addSecurityGroup(securityGroup);
+
+        return alb;
     }
 
     private ApplicationTargetGroup createTargetGroup(IVpc vpc) {

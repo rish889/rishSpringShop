@@ -476,6 +476,12 @@
        "albSecurityGroup49866104",
        "GroupId"
       ]
+     },
+     {
+      "Fn::GetAtt": [
+       "albsg40B076C4",
+       "GroupId"
+      ]
      }
     ],
     "Subnets": [
@@ -569,6 +575,25 @@
    },
    "Metadata": {
     "aws:cdk:path": "rss/target-group/Resource"
+   }
+  },
+  "albsg40B076C4": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "rss/alb-sg",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "vpcA2121C38"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/alb-sg/Resource"
    }
   },
   "CDKMetadata": {
