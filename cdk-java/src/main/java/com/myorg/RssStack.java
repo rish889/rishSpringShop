@@ -10,10 +10,10 @@ import software.amazon.awscdk.services.ecr.Repository;
 import software.amazon.awscdk.services.ecs.ContainerImage;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateService;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskImageOptions;
+import software.amazon.awscdk.services.elasticloadbalancingv2.ApplicationLoadBalancer;
 import software.amazon.awscdk.services.rds.*;
 import software.constructs.Construct;
 
-import java.util.Arrays;
 import java.util.Map;
 
 public class RssStack extends Stack {
@@ -24,6 +24,8 @@ public class RssStack extends Stack {
     public RssStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
         final IVpc vpc = createVpc();
+        final ApplicationLoadBalancer alb = createAlb(vpc);
+
 
 //        final Map<String, String> environment = new HashMap<>();
 //        environment.put("spring.profiles.active", "dev");
@@ -36,7 +38,6 @@ public class RssStack extends Stack {
     }
 
     private ApplicationLoadBalancedFargateService createProductService(String id, final Map<String, String> environment) {
-
 
         ApplicationLoadBalancedFargateService productService = ApplicationLoadBalancedFargateService
                 .Builder
@@ -59,6 +60,15 @@ public class RssStack extends Stack {
 
     private IVpc createVpc() {
         return Vpc.Builder.create(this, "vpc").build();
+    }
+
+    private ApplicationLoadBalancer createAlb(IVpc vpc) {
+        return ApplicationLoadBalancer.Builder
+                .create(this, "alb")
+                .vpc(vpc)
+                .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PUBLIC).build())
+                .internetFacing(true)
+                .build();
     }
 
     private Instance createBastion(final IVpc vpc, final String id) {
