@@ -33,7 +33,7 @@ public class RssStack extends Stack {
 //        final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id, productService);
 
 //        environment.put("rss.postgres.host", databaseInstance.getDbInstanceEndpointAddress());
-        environment.put("rss.postgres.host", "rishDatabase");
+//        environment.put("rss.postgres.host", "rishDatabase");
     }
 
     private ApplicationLoadBalancedFargateService createProductService(String id, final Map<String, String> environment) {
