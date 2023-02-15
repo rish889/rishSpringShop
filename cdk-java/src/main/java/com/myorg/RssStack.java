@@ -15,6 +15,7 @@ import software.amazon.awscdk.services.elasticloadbalancingv2.*;
 import software.amazon.awscdk.services.rds.*;
 import software.constructs.Construct;
 
+import java.util.Arrays;
 import java.util.Map;
 
 //https://www.gravitywell.co.uk/insights/deploying-applications-to-ecs-fargate-with-aws-cdk/
@@ -32,7 +33,10 @@ public class RssStack extends Stack {
         final ApplicationListener applicationListener = alb.addListener("alb-listener", ApplicationListenerProps.builder()
                 .open(true)
                 .port(80)
-                .protocol(ApplicationProtocol.HTTP).build());
+                .protocol(ApplicationProtocol.HTTP)
+                .loadBalancer(alb)
+                .defaultTargetGroups(Arrays.asList(targetGroup))
+                .build());
 
 
 //        final Map<String, String> environment = new HashMap<>();
