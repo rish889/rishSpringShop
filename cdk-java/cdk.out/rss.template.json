@@ -346,6 +346,417 @@
     "aws:cdk:path": "rss/vpc/VPCGW"
    }
   },
+  "productserviceLBFE39C8A8": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "productserviceLBSecurityGroupF7B3DE52",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Ref": "vpcpublicSubnet1SubnetA635257E"
+     },
+     {
+      "Ref": "vpcpublicSubnet2Subnet027D165B"
+     }
+    ],
+    "Type": "application"
+   },
+   "DependsOn": [
+    "vpcpublicSubnet1DefaultRouteF0973989",
+    "vpcpublicSubnet1RouteTableAssociationB46101B8",
+    "vpcpublicSubnet2DefaultRoute13685A07",
+    "vpcpublicSubnet2RouteTableAssociation73F6478A"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/LB/Resource"
+   }
+  },
+  "productserviceLBSecurityGroupF7B3DE52": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Automatically created Security Group for ELB rssproductserviceLB7073D504",
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow from anyone on port 80",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     }
+    ],
+    "VpcId": {
+     "Ref": "vpcA2121C38"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/LB/SecurityGroup/Resource"
+   }
+  },
+  "productserviceLBSecurityGrouptorssproductserviceServiceSecurityGroup72D3A5CE80650C4032": {
+   "Type": "AWS::EC2::SecurityGroupEgress",
+   "Properties": {
+    "GroupId": {
+     "Fn::GetAtt": [
+      "productserviceLBSecurityGroupF7B3DE52",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "Description": "Load balancer to target",
+    "DestinationSecurityGroupId": {
+     "Fn::GetAtt": [
+      "productserviceServiceSecurityGroup66BFB566",
+      "GroupId"
+     ]
+    },
+    "FromPort": 80,
+    "ToPort": 80
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/LB/SecurityGroup/to rssproductserviceServiceSecurityGroup72D3A5CE:80"
+   }
+  },
+  "productserviceLBPublicListener6925FB79": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "productserviceLBPublicListenerECSGroup1F074086"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "productserviceLBFE39C8A8"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/LB/PublicListener/Resource"
+   }
+  },
+  "productserviceLBPublicListenerECSGroup1F074086": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "Port": 80,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": {
+     "Ref": "vpcA2121C38"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/LB/PublicListener/ECSGroup/Resource"
+   }
+  },
+  "productserviceTaskDefTaskRole75C24A96": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/TaskDef/TaskRole/Resource"
+   }
+  },
+  "productserviceTaskDef18A63324": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         {
+          "Ref": "AWS::AccountId"
+         },
+         ".dkr.ecr.",
+         {
+          "Ref": "AWS::Region"
+         },
+         ".",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/rss-product-service-repository:latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "productserviceTaskDefwebLogGroupDCBEE455"
+        },
+        "awslogs-stream-prefix": "product-service",
+        "awslogs-region": {
+         "Ref": "AWS::Region"
+        }
+       }
+      },
+      "Name": "web",
+      "PortMappings": [
+       {
+        "ContainerPort": 80,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "productserviceTaskDefExecutionRole528FFE9D",
+      "Arn"
+     ]
+    },
+    "Family": "rssproductserviceTaskDef379A5DB9",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "productserviceTaskDefTaskRole75C24A96",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/TaskDef/Resource"
+   }
+  },
+  "productserviceTaskDefwebLogGroupDCBEE455": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/TaskDef/web/LogGroup/Resource"
+   }
+  },
+  "productserviceTaskDefExecutionRole528FFE9D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/TaskDef/ExecutionRole/Resource"
+   }
+  },
+  "productserviceTaskDefExecutionRoleDefaultPolicy7C6672EB": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":ecr:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":repository/rss-product-service-repository"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "productserviceTaskDefwebLogGroupDCBEE455",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "productserviceTaskDefExecutionRoleDefaultPolicy7C6672EB",
+    "Roles": [
+     {
+      "Ref": "productserviceTaskDefExecutionRole528FFE9D"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/TaskDef/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "productserviceServiceE1ACA80D": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "EcsDefaultClusterMnL3mNNYNvpcFC68BC3A"
+    },
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "EnableECSManagedTags": false,
+    "HealthCheckGracePeriodSeconds": 60,
+    "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "web",
+      "ContainerPort": 80,
+      "TargetGroupArn": {
+       "Ref": "productserviceLBPublicListenerECSGroup1F074086"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "productserviceServiceSecurityGroup66BFB566",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Ref": "vpcisolatedSubnet1Subnet06BBE51F"
+       },
+       {
+        "Ref": "vpcisolatedSubnet2Subnet51F71E92"
+       }
+      ]
+     }
+    },
+    "TaskDefinition": {
+     "Ref": "productserviceTaskDef18A63324"
+    }
+   },
+   "DependsOn": [
+    "productserviceLBPublicListenerECSGroup1F074086",
+    "productserviceLBPublicListener6925FB79"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/Service/Service"
+   }
+  },
+  "productserviceServiceSecurityGroup66BFB566": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "rss/product-service/Service/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "vpcA2121C38"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/Service/SecurityGroup/Resource"
+   }
+  },
+  "productserviceServiceSecurityGroupfromrssproductserviceLBSecurityGroupD27B37BC8034F201A6": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "Description": "Load balancer to target",
+    "FromPort": 80,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "productserviceServiceSecurityGroup66BFB566",
+      "GroupId"
+     ]
+    },
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "productserviceLBSecurityGroupF7B3DE52",
+      "GroupId"
+     ]
+    },
+    "ToPort": 80
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/product-service/Service/SecurityGroup/from rssproductserviceLBSecurityGroupD27B37BC:80"
+   }
+  },
+  "EcsDefaultClusterMnL3mNNYNvpcFC68BC3A": {
+   "Type": "AWS::ECS::Cluster",
+   "Metadata": {
+    "aws:cdk:path": "rss/EcsDefaultClusterMnL3mNNYNvpc/Resource"
+   }
+  },
   "bastionsg9F6FB053": {
    "Type": "AWS::EC2::SecurityGroup",
    "Properties": {
@@ -608,12 +1019,38 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12RTW/CMAyGfwv3NAM0TbtCkRA7VS3iOrnBsIw2QY4DQlX/+9qGfrCTncdv7NfJUn68y/kM7i5Sx0tU6FxWGYO6iAZ9V6iWsjpclYhP5pDEIvF5oVXmc4PcsjFLrWfcQ17gyEe2cs4qDaytGcQiIX0DxrHHzjBSk28beofHc+jztOLG1k+JhkWGypPmx5asv3bjXsDOOAajMLQc8xfVzpwJnauFhlJWqQ2++9hfS8iedIG1oKOT1QYYcnA4NA3WBxub9RT06mYshf026/5mLVxHXQkGzkiyCv5aYQh7oDPyZOlB8L9S1yJFZz2FLRMgKLF5yG6fSSG25qjbH6jFF9zgbfEp53IpF7Nfp3VE3rAuUaYh/gEUB+ELGAIAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31Sy27bMBD8ltxpNjGKolc7bgMXASrIRq7BilorjClS4MOBIejfuyL1ilv0xOFwSM7O7pp/+8rv7+DDrUR5XilZ8PbgQZwZUa8tijVvXxrBHk/6JXtkWSiUFIdQaPQ9N6PcBI9HKBTO/MxtnDNCgpdGT2KWWXkBj/Mbe+3REn4i9gOuw6fDbuPJ1luN2rMDimClvz5ZE5r43X+JH5VF5/6i9zrxe+08aIHJQcIdQ2F5jo1x0ht73YJDotxrA7736PimaSiJWNGzgXILqr9X/gRb9TWhvUh6EhU4L4UiRREVUlcXivTft21v4dN+qZPOox40I16cH+lnim5MYLHti3G8HawdwZ13eJJajt24ZYz2IOn1BXdTVoxygCqQl+hqgB2TUPM2N2kU4poZshkbOqMx68yak1QUuTIV2Xw21VTEiDtmSzragYeCOjF1LI3OJN9tl8SopqbbNF+77dxfF1lXg4YKLW/TdPTCtKT8FkM3CW5Puo7l6EywKZjfwTchyjOwUOMQzlJCCZcx1479ggt8efjO7/maP9y9OylXNmgva+R5Wv8A0IYNy6IDAAA="
    },
    "Metadata": {
     "aws:cdk:path": "rss/CDKMetadata/Default"
    },
    "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "productserviceLoadBalancerDNS95E8A76B": {
+   "Value": {
+    "Fn::GetAtt": [
+     "productserviceLBFE39C8A8",
+     "DNSName"
+    ]
+   }
+  },
+  "productserviceServiceURLB3824967": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "http://",
+      {
+       "Fn::GetAtt": [
+        "productserviceLBFE39C8A8",
+        "DNSName"
+       ]
+      }
+     ]
+    ]
+   }
   }
  },
  "Parameters": {
