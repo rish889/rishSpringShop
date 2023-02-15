@@ -5,6 +5,10 @@ import software.amazon.awscdk.RemovalPolicy;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.ec2.*;
+import software.amazon.awscdk.services.ecr.Repository;
+import software.amazon.awscdk.services.ecs.ContainerImage;
+import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateService;
+import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskImageOptions;
 import software.amazon.awscdk.services.rds.*;
 import software.constructs.Construct;
 
@@ -19,8 +23,29 @@ public class RssStack extends Stack {
         super(scope, id, props);
 
         final Vpc vpc = createVpc();
+        final ApplicationLoadBalancedFargateService productService = createProductService(vpc, id);
         final Instance bastionInstance = createBastion(vpc, id);
         final DatabaseInstance databaseInstance = createRds(vpc, bastionInstance, id);
+    }
+
+    private ApplicationLoadBalancedFargateService createProductService(Vpc vpc, String id) {
+        ApplicationLoadBalancedFargateService productService = ApplicationLoadBalancedFargateService
+                .Builder
+                .create(this, "product-service")
+                .vpc(vpc)
+                .taskImageOptions(ApplicationLoadBalancedTaskImageOptions.builder()
+                        .image(ContainerImage.fromEcrRepository(Repository.fromRepositoryName(
+                                this,
+                                "rss-product-service-repository",
+                                "rss-product-service-repository")))
+                        .containerPort(80)
+                        .build())
+                .publicLoadBalancer(true)
+                .cpu(256)
+                .memoryLimitMiB(512)
+                .build();
+
+        return productService;
     }
 
     private Vpc createVpc() {
@@ -49,7 +74,9 @@ public class RssStack extends Stack {
 
     }
 
-    private DatabaseInstance createRds(Vpc vpc, Instance bastionInstance, final String id) {
+    private DatabaseInstance createRds(Vpc vpc,
+                                       Instance bastionInstance,
+                                       final String id) {
         final IInstanceEngine instanceEngine = DatabaseInstanceEngine.postgres(
                 PostgresInstanceEngineProps.builder()
                         .version(PostgresEngineVersion.VER_13_6)
