@@ -10,8 +10,12 @@ public class CdkApp {
 //        new EcsStack(app,
 //                "RishSpringShopStack",
 //                StackProps.builder().build());
-        new RssRdsStack(app,
-                "RssRdsStack",
+//        new RssRdsStack(app,
+//                "RssRdsStack",
+//                StackProps.builder().build());
+
+        new RssRdsStack2(app,
+                "RssRdsStack2",
                 StackProps.builder().build());
 
         app.synth();
