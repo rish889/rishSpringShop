@@ -95,6 +95,7 @@ public class RssStack extends Stack {
                 .build();
 
         databaseInstance.getConnections().allowFrom(bastionInstance, Port.tcp(5432));
+        databaseInstance.getConnections().allowFrom(productService.getService(), Port.tcp(5432));
         return databaseInstance;
     }
 

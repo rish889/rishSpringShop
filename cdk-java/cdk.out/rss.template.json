@@ -1045,6 +1045,30 @@
     "aws:cdk:path": "rss/rss-rds/SecurityGroup/from rssbastionsg395E93EC:5432"
    }
   },
+  "rssrdsSecurityGroupfromrssproductserviceServiceSecurityGroup72D3A5CE543272A9B7DB": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "Description": "from rssproductserviceServiceSecurityGroup72D3A5CE:5432",
+    "FromPort": 5432,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "rssrdsSecurityGroupA353CAD9",
+      "GroupId"
+     ]
+    },
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "productserviceServiceSecurityGroup66BFB566",
+      "GroupId"
+     ]
+    },
+    "ToPort": 5432
+   },
+   "Metadata": {
+    "aws:cdk:path": "rss/rss-rds/SecurityGroup/from rssproductserviceServiceSecurityGroup72D3A5CE:5432"
+   }
+  },
   "rssrssrdsSecretA80366583fdaad7efa858a3daf9490cf0a702aeb": {
    "Type": "AWS::SecretsManager::Secret",
    "Properties": {
