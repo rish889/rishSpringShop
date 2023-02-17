@@ -1,5 +1,6 @@
 package com.rish889.rishShop.controller;
 
+import com.rish889.rishShop.convertor.ProductConverter;
 import com.rish889.rishShop.dto.CreateProductDto;
 import com.rish889.rishShop.dto.GetProductDto;
 import com.rish889.rishShop.model.Product;
@@ -31,11 +32,7 @@ public class ProductController {
     public Mono<ResponseEntity<GetProductDto>> getProductById(@PathVariable @Positive @Parameter(example = "1") Long productId) {
         logger.info("getProductById() : {}", productId);
         try {
-            Mono<GetProductDto> productMono = productService.findById(productId).map(product ->
-                    GetProductDto.builder()
-                            .id(product.getId())
-                            .productName(product.getProductName())
-                            .build());
+            Mono<GetProductDto> productMono = productService.findById(productId).map(ProductConverter::convertToDto);
             return productMono.map(u -> ResponseEntity.ok(u));
         } catch (Exception ex) {
             return Mono.just(ResponseEntity.internalServerError().body(null));
@@ -46,7 +43,7 @@ public class ProductController {
     public Mono<ResponseEntity<Product>> createProduct(@Valid @RequestBody CreateProductDto dto) {
         logger.info("createProduct() : {}", dto);
         try {
-            Mono<Product> productMono = productService.createProduct(Product.builder().productName(dto.getProductName()).build());
+            Mono<Product> productMono = productService.createProduct(ProductConverter.convertFromDto(dto));
             return productMono.map(u -> ResponseEntity.ok(u));
         } catch (Exception ex) {
             return Mono.just(ResponseEntity.internalServerError().body(null));
