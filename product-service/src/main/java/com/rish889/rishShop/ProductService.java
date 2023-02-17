@@ -16,4 +16,8 @@ public class ProductService {
     public Mono<Product> findById(Long productId) {
         return productRepository.findById(productId);
     }
+
+    public Mono<Product> createProduct(Product product) {
+        return productRepository.save(product);
+    }
 }
