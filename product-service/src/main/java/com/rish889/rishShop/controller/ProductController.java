@@ -1,6 +1,7 @@
 package com.rish889.rishShop.controller;
 
 import com.rish889.rishShop.dto.CreateProductDto;
+import com.rish889.rishShop.dto.GetProductDto;
 import com.rish889.rishShop.model.Product;
 import com.rish889.rishShop.service.ProductService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,10 +28,14 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/{productId}")
-    public Mono<ResponseEntity<Product>> getProductById(@PathVariable @Positive @Parameter(example = "1") Long productId) {
+    public Mono<ResponseEntity<GetProductDto>> getProductById(@PathVariable @Positive @Parameter(example = "1") Long productId) {
         logger.info("getProductById() : {}", productId);
         try {
-            Mono<Product> productMono = productService.findById(productId);
+            Mono<GetProductDto> productMono = productService.findById(productId).map(product ->
+                    GetProductDto.builder()
+                            .id(product.getId())
+                            .productName(product.getProductName())
+                            .build());
             return productMono.map(u -> ResponseEntity.ok(u));
         } catch (Exception ex) {
             return Mono.just(ResponseEntity.internalServerError().body(null));
