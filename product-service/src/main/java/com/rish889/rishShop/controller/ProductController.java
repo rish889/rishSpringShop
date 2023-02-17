@@ -3,7 +3,6 @@ package com.rish889.rishShop.controller;
 import com.rish889.rishShop.convertor.ProductConverter;
 import com.rish889.rishShop.dto.CreateProductDto;
 import com.rish889.rishShop.dto.GetProductDto;
-import com.rish889.rishShop.model.Product;
 import com.rish889.rishShop.service.ProductService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
