@@ -1,5 +1,6 @@
 package com.rish889.rishShop;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/{productId}")
-    public Mono<ResponseEntity<Product>> getProductById(@PathVariable Long productId) {
+    public Mono<ResponseEntity<Product>> getProductById(@PathVariable @Parameter(example = "1") Long productId) {
         logger.info("getProductById() : {}", productId);
         try {
             Mono<Product> productMono = productService.findById(productId);

@@ -19,7 +19,7 @@ public class Product {
     private Long id;
 
     @NotBlank
-    @Size(min = 0, max = 255)
+    @Size(min = 1, max = 255)
     @Column(value = "product_name")
     private String productName;
 }
