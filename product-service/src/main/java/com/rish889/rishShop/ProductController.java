@@ -22,21 +22,21 @@ public class ProductController {
     public Mono<ResponseEntity<Product>> getProductById(@PathVariable Long productId) {
         logger.info("getProductById() : {}", productId);
         try {
-            if (productId == 1) {
-                throw new RuntimeException("Something went wrong");
-            }
             Mono<Product> productMono = productService.findById(productId);
             return productMono.map(u -> ResponseEntity.ok(u));
         } catch (Exception ex) {
             return Mono.just(ResponseEntity.internalServerError().body(null));
         }
-
     }
 
     @PostMapping
     public Mono<ResponseEntity<Product>> createProduct(@RequestBody Product product) {
         logger.info("createProduct() : {}", product);
-        Mono<Product> productMono = productService.createProduct(product);
-        return productMono.map(u -> ResponseEntity.ok(u));
+        try {
+            Mono<Product> productMono = productService.createProduct(product);
+            return productMono.map(u -> ResponseEntity.ok(u));
+        } catch (Exception ex) {
+            return Mono.just(ResponseEntity.internalServerError().body(null));
+        }
     }
 }
