@@ -21,8 +21,16 @@ public class ProductController {
     @GetMapping("/{productId}")
     public Mono<ResponseEntity<Product>> getProductById(@PathVariable Long productId) {
         logger.info("getProductById() : {}", productId);
-        Mono<Product> productMono = productService.findById(productId);
-        return productMono.map(u -> ResponseEntity.ok(u));
+        try {
+            if (productId == 1) {
+                throw new RuntimeException("Something went wrong");
+            }
+            Mono<Product> productMono = productService.findById(productId);
+            return productMono.map(u -> ResponseEntity.ok(u));
+        } catch (Exception ex) {
+            return Mono.just(ResponseEntity.internalServerError().body(null));
+        }
+
     }
 
     @PostMapping
