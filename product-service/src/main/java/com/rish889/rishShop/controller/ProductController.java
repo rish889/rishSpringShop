@@ -32,8 +32,9 @@ public class ProductController {
     public Mono<ResponseEntity<GetProductDto>> getProductById(@PathVariable @Positive @Parameter(example = "1") Long productId) {
         logger.info("getProductById() : {}", productId);
         try {
-            Mono<GetProductDto> productMono = productService.findById(productId).map(ProductConverter::convertToDto);
-            return productMono.map(u -> ResponseEntity.ok(u));
+            return productService.findById(productId)
+                    .map(ProductConverter::convertToDto)
+                    .map(u -> ResponseEntity.ok(u));
         } catch (Exception ex) {
             return Mono.just(ResponseEntity.internalServerError().body(null));
         }
