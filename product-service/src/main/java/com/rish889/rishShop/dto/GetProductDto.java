@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class GetProductDto {
 
+    @Schema(example = "1")
     private Long id;
 
     @Schema(example = "iphone4")

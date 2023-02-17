@@ -40,11 +40,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public Mono<ResponseEntity<Product>> createProduct(@Valid @RequestBody CreateProductDto dto) {
+    public Mono<ResponseEntity<GetProductDto>> createProduct(@Valid @RequestBody CreateProductDto dto) {
         logger.info("createProduct() : {}", dto);
         try {
-            Mono<Product> productMono = productService.createProduct(ProductConverter.convertFromDto(dto));
-            return productMono.map(u -> ResponseEntity.ok(u));
+            return productService.createProduct(ProductConverter.convertFromDto(dto))
+                    .map(ProductConverter::convertToDto)
+                    .map(u -> ResponseEntity.ok(u));
         } catch (Exception ex) {
             return Mono.just(ResponseEntity.internalServerError().body(null));
         }
