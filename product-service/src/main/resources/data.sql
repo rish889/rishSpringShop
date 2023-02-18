@@ -4,7 +4,3 @@ INSERT INTO products (id, product_name) VALUES
   (3, 'iPhone 12'),
   (4, 'One Plus 6'),
   (5, 'One Plus 7');
-
-
---INSERT INTO products (product_name) VALUES ('iPhone 10');
---INSERT INTO products (product_name) VALUES ('iPhone 11');
