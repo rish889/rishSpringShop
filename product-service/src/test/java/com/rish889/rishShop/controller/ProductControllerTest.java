@@ -29,5 +29,4 @@ class ProductControllerIntegrationTest {
                 .expectHeader().valueEquals("Content-Type", "application/json")
                 .expectBody().jsonPath("product_name").isEqualTo("iPhone 10");
     }
-
 }
