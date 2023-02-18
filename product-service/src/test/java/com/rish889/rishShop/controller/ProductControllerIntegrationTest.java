@@ -17,7 +17,20 @@ class ProductControllerIntegrationTest {
     private WebTestClient webTestClient;
 
     @Test
-    public void testGetProductWebTestClient() {
+    public void testHealthCheck() {
+        WebTestClient
+                .bindToServer()
+                .baseUrl("http://localhost:" + port)
+                .build()
+                .get()
+                .uri("/")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class).isEqualTo("Rish Shop Healthy 1");
+    }
+
+    @Test
+    public void testGetProduct() {
         WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:" + port)
