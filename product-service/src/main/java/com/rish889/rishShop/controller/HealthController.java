@@ -13,11 +13,9 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class HealthController {
 
-    private static final Logger logger = LoggerFactory.getLogger(HealthController.class);
-
     @GetMapping
     private Mono<String> healthCheck() {
-        logger.info("Rish Shop Healthy 1");
+        log.info("Rish Shop Healthy 1");
         return Mono.just("Rish Shop Healthy 1");
     }
 }

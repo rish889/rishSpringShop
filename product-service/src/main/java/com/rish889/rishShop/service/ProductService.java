@@ -1,7 +1,8 @@
 package com.rish889.rishShop.service;
 
-import com.rish889.rishShop.repository.ProductRepository;
+import com.rish889.rishShop.controller.BadRequestException;
 import com.rish889.rishShop.model.Product;
+import com.rish889.rishShop.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,9 @@ public class ProductService {
     private ProductRepository productRepository;
 
     public Mono<Product> findById(Long productId) {
-        return productRepository.findById(productId);
+        return productRepository
+                .findById(productId)
+                .switchIfEmpty(Mono.error(new BadRequestException("Product not found. ProductId : " + productId)));
     }
 
     public Mono<Product> createProduct(Product product) {
