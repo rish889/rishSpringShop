@@ -1,6 +1,6 @@
 package com.rish889.rishShop.service;
 
-import com.rish889.rishShop.controller.BadRequestException;
+import com.rish889.rishShop.exception.BadRequestException;
 import com.rish889.rishShop.model.Product;
 import com.rish889.rishShop.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.rish889.rishShop.controller;
+package com.rish889.rishShop.exception;
 
 import lombok.Builder;
 import lombok.Data;
