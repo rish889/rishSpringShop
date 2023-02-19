@@ -45,7 +45,7 @@ public class ProductController {
         try {
             return productService.createProduct(ProductConverter.convertFromDto(dto))
                     .map(ProductConverter::convertToDto)
-                    .map(getProductDto -> ResponseEntity.created(null).body(getProductDto));
+                    .map(getProductDto -> ResponseEntity.ok(getProductDto));
         } catch (Exception ex) {
             return Mono.just(ResponseEntity.internalServerError().body(null));
         }
