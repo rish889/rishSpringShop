@@ -31,7 +31,6 @@ public class ProductController {
                 .map(u -> ResponseEntity.ok(u));
     }
 
-
     @PostMapping
     public Mono<ResponseEntity<GetProductDto>> createProduct(@Valid @RequestBody CreateProductDto dto) {
         log.info("createProduct() : {}", dto);
