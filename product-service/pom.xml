@@ -45,6 +45,20 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!--    http://localhost:8080/actuator     -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!--    http://localhost:8080/webjars/swagger-ui/index.html     -->
+        <!--    http://localhost:8080/v3/api-docs       -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+
         <!-- ##################### Test Dependencies ##################### -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -66,15 +80,6 @@
             <artifactId>r2dbc-h2</artifactId>
             <scope>test</scope>
         </dependency>
-
-<!--    http://localhost:8080/webjars/swagger-ui/index.html     -->
-<!--    http://localhost:8080/v3/api-docs       -->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
-            <version>2.0.2</version>
-        </dependency>
-
     </dependencies>
 
     <build>
