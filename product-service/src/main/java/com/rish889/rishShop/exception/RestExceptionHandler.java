@@ -17,6 +17,19 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 @Slf4j
 class RestExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    Mono<ResponseEntity<ErrorDetails>> allOtherExceptions(Exception ex) {
+        log.error("Exception : {}.", ExceptionUtils.getStackTrace(ex));
+        final ErrorDetails errorDetails = ErrorDetails.builder().messages(Arrays.asList("Something Went Wrong")).build();
+        return Mono.just(ResponseEntity.internalServerError().body(errorDetails));
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    Mono<ResponseEntity<ErrorDetails>> badRequest(BadRequestException ex) {
+        log.error("ExceptionMessage : {}.", ex.getMessage());
+        final ErrorDetails errorDetails = ErrorDetails.builder().messages(Arrays.asList(ex.getMessage())).build();
+        return Mono.just(ResponseEntity.badRequest().body(errorDetails));
+    }
 
     @ExceptionHandler(ConstraintViolationException.class)
     Mono<ResponseEntity<ErrorDetails>> constraintViolation(ConstraintViolationException ex) {
@@ -41,19 +54,5 @@ class RestExceptionHandler {
                 .messages(errorMessages)
                 .build();
         return Mono.just(ResponseEntity.badRequest().body(errorDetails));
-    }
-
-    @ExceptionHandler(BadRequestException.class)
-    Mono<ResponseEntity<ErrorDetails>> badRequest(BadRequestException ex) {
-        log.error("ExceptionMessage : {}.", ex.getMessage());
-        final ErrorDetails errorDetails = ErrorDetails.builder().messages(Arrays.asList(ex.getMessage())).build();
-        return Mono.just(ResponseEntity.badRequest().body(errorDetails));
-    }
-
-    @ExceptionHandler(Exception.class)
-    Mono<ResponseEntity<ErrorDetails>> allExceptions(Exception ex) {
-        log.error("Exception : {}.", ExceptionUtils.getStackTrace(ex));
-        final ErrorDetails errorDetails = ErrorDetails.builder().messages(Arrays.asList("Something Went Wrong")).build();
-        return Mono.just(ResponseEntity.internalServerError().body(errorDetails));
     }
 }
