@@ -10,6 +10,7 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -20,21 +21,24 @@ class RestExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     Mono<ResponseEntity<ErrorDetails>> constraintViolation(ConstraintViolationException ex) {
         log.error("ExceptionMessage : {}.", ex.getMessage());
+        final List<String> errorMessages = ex.getConstraintViolations().stream()
+                .map(constraintViolation -> constraintViolation.getMessage())
+                .collect(Collectors.toList());
         final ErrorDetails errorDetails = ErrorDetails.builder()
-                .messages(ex.getConstraintViolations().stream()
-                        .map(constraintViolation -> constraintViolation.getMessage())
-                        .collect(Collectors.toList()))
+                .messages(errorMessages)
                 .build();
+
         return Mono.just(ResponseEntity.badRequest().body(errorDetails));
     }
 
     @ExceptionHandler(WebExchangeBindException.class)
     Mono<ResponseEntity<ErrorDetails>> webExchangeBindException(WebExchangeBindException ex) {
         log.error("ExceptionMessage : {}.", ex.getMessage());
+        final List<String> errorMessages = ex.getAllErrors().stream()
+                .map(fieldError -> fieldError.getDefaultMessage())
+                .collect(Collectors.toList());
         final ErrorDetails errorDetails = ErrorDetails.builder()
-                .messages(ex.getAllErrors().stream()
-                        .map(fieldError -> fieldError.getDefaultMessage())
-                        .collect(Collectors.toList()))
+                .messages(errorMessages)
                 .build();
         return Mono.just(ResponseEntity.badRequest().body(errorDetails));
     }
@@ -42,12 +46,14 @@ class RestExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     Mono<ResponseEntity<ErrorDetails>> badRequest(BadRequestException ex) {
         log.error("ExceptionMessage : {}.", ex.getMessage());
-        return Mono.just(ResponseEntity.badRequest().body(ErrorDetails.builder().messages(Arrays.asList(ex.getMessage())).build()));
+        final ErrorDetails errorDetails = ErrorDetails.builder().messages(Arrays.asList(ex.getMessage())).build();
+        return Mono.just(ResponseEntity.badRequest().body(errorDetails));
     }
 
     @ExceptionHandler(Exception.class)
     Mono<ResponseEntity<ErrorDetails>> allExceptions(Exception ex) {
         log.error("Exception : {}.", ExceptionUtils.getStackTrace(ex));
-        return Mono.just(ResponseEntity.internalServerError().body(ErrorDetails.builder().messages(Arrays.asList("Something Went Wrong")).build()));
+        final ErrorDetails errorDetails = ErrorDetails.builder().messages(Arrays.asList("Something Went Wrong")).build();
+        return Mono.just(ResponseEntity.internalServerError().body(errorDetails));
     }
 }
