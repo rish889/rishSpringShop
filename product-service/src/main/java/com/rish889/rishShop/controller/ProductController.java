@@ -24,7 +24,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/{productId}")
-    public Mono<ResponseEntity<GetProductDto>> getProductById(@PathVariable @Positive @Parameter(example = "1") Long productId) {
+    public Mono<ResponseEntity<GetProductDto>> getProductById(@PathVariable @Positive(message = "ProductId must be greater than 0") @Parameter(example = "1") Long productId) {
         log.info("getProductById() : {}", productId);
         return productService.findById(productId)
                 .map(ProductConverter::convertToDto)
