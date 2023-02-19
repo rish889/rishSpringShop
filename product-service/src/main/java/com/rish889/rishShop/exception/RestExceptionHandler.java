@@ -6,6 +6,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.support.WebExchangeBindException;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
@@ -22,6 +23,17 @@ class RestExceptionHandler {
         final ErrorDetails errorDetails = ErrorDetails.builder()
                 .messages(ex.getConstraintViolations().stream()
                         .map(constraintViolation -> constraintViolation.getMessage())
+                        .collect(Collectors.toList()))
+                .build();
+        return Mono.just(ResponseEntity.badRequest().body(errorDetails));
+    }
+
+    @ExceptionHandler(WebExchangeBindException.class)
+    Mono<ResponseEntity<ErrorDetails>> webExchangeBindException(WebExchangeBindException ex) {
+        log.error("ExceptionMessage : {}.", ex.getMessage());
+        final ErrorDetails errorDetails = ErrorDetails.builder()
+                .messages(ex.getAllErrors().stream()
+                        .map(fieldError -> fieldError.getDefaultMessage())
                         .collect(Collectors.toList()))
                 .build();
         return Mono.just(ResponseEntity.badRequest().body(errorDetails));
