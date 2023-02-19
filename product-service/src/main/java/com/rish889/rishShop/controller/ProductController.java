@@ -33,7 +33,8 @@ public class ProductController {
         try {
             return productService.findById(productId)
                     .map(ProductConverter::convertToDto)
-                    .map(u -> ResponseEntity.ok(u));
+                    .map(u -> ResponseEntity.ok(u))
+                    .switchIfEmpty(Mono.error(new RuntimeException("csdvsvs")));
         } catch (Exception ex) {
             return Mono.just(ResponseEntity.internalServerError().body(null));
         }
