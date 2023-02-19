@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -40,12 +41,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public Mono<ResponseEntity<GetProductDto>> createProduct(@Valid @RequestBody CreateProductDto dto) {
+    public Mono<ResponseEntity<GetProductDto>> createProduct(@Valid @RequestBody CreateProductDto dto, ServerHttpRequest serverHttpRequest) {
         logger.info("createProduct() : {}", dto);
         try {
             return productService.createProduct(ProductConverter.convertFromDto(dto))
                     .map(ProductConverter::convertToDto)
-                    .map(u -> ResponseEntity.ok(u));
+                    .map(getProductDto -> ResponseEntity.created(null).body(getProductDto));
         } catch (Exception ex) {
             return Mono.just(ResponseEntity.internalServerError().body(null));
         }
