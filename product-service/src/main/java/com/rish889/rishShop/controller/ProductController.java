@@ -34,8 +34,9 @@ public class ProductController {
             return productService.findById(productId)
                     .map(ProductConverter::convertToDto)
                     .map(u -> ResponseEntity.ok(u))
-                    .switchIfEmpty(Mono.error(new RuntimeException("csdvsvs")));
+                    .switchIfEmpty(Mono.error(new BadRequestException("Product not found. ProductId : " + productId)));
         } catch (Exception ex) {
+            log.error("getProductById() : {}. Exception : {}", productId, ex);
             return Mono.just(ResponseEntity.internalServerError().body(null));
         }
     }
