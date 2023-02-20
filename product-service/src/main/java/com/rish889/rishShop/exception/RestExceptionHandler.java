@@ -18,21 +18,21 @@ import java.util.stream.Collectors;
 @Slf4j
 class RestExceptionHandler {
     @ExceptionHandler(Exception.class)
-    Mono<ResponseEntity<ErrorDetails>> allOtherExceptions(Exception ex) {
+    Mono<ResponseEntity<ErrorDetails>> handleAllOtherExceptions(Exception ex) {
         log.error("Exception : {}.", ExceptionUtils.getStackTrace(ex));
         final ErrorDetails errorDetails = ErrorDetails.builder().messages(Arrays.asList("Something Went Wrong")).build();
         return Mono.just(ResponseEntity.internalServerError().body(errorDetails));
     }
 
     @ExceptionHandler(BadRequestException.class)
-    Mono<ResponseEntity<ErrorDetails>> badRequest(BadRequestException ex) {
+    Mono<ResponseEntity<ErrorDetails>> handleBadRequestException(BadRequestException ex) {
         log.error("ExceptionMessage : {}.", ex.getMessage());
         final ErrorDetails errorDetails = ErrorDetails.builder().messages(Arrays.asList(ex.getMessage())).build();
         return Mono.just(ResponseEntity.badRequest().body(errorDetails));
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    Mono<ResponseEntity<ErrorDetails>> constraintViolation(ConstraintViolationException ex) {
+    Mono<ResponseEntity<ErrorDetails>> handleConstraintViolationException(ConstraintViolationException ex) {
         log.error("ExceptionMessage : {}.", ex.getMessage());
         final List<String> errorMessages = ex.getConstraintViolations().stream()
                 .map(constraintViolation -> constraintViolation.getMessage())
@@ -45,7 +45,7 @@ class RestExceptionHandler {
     }
 
     @ExceptionHandler(WebExchangeBindException.class)
-    Mono<ResponseEntity<ErrorDetails>> webExchangeBindException(WebExchangeBindException ex) {
+    Mono<ResponseEntity<ErrorDetails>> handleWebExchangeBindException(WebExchangeBindException ex) {
         log.error("ExceptionMessage : {}.", ex.getMessage());
         final List<String> errorMessages = ex.getAllErrors().stream()
                 .map(fieldError -> fieldError.getDefaultMessage())
