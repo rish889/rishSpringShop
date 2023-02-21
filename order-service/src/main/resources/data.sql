@@ -1,6 +1,6 @@
-INSERT INTO products (product_name) VALUES
-  ('iPhone 10'),
-  ('iPhone 11'),
-  ('iPhone 12'),
-  ('One Plus 6'),
-  ('One Plus 7');
+INSERT INTO orders (user_id, product_id, quantity) VALUES
+  ('1', '5', 2),
+  ('2', '4', 3),
+  ('3', '3', 4),
+  ('4', '2', 5),
+  ('5', '1', 6);
