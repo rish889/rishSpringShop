@@ -17,7 +17,7 @@ public class SpringSecurityConfiguration {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeExchange()
                 .pathMatchers("/").permitAll()
-                .pathMatchers("/v1/products/*").permitAll()
+                .pathMatchers("/v1/*").permitAll()
                 .anyExchange().authenticated()
                 .and().formLogin()
                 .and()
