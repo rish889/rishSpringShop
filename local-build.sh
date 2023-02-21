@@ -8,6 +8,6 @@ target/product-service-0.0.1-SNAPSHOT.jar
 
 # mvn -f ./gatling-load-test/pom.xml gatling:test
 
-# cdk synth
-# cdk deploy
-# cdk destroy
+# cd ./cdk-deploy/; cdk synth; cd..
+# cd ./cdk-deploy/; cdk deploy; cd..
+# cd ./cdk-deploy/; cdk destroy; cd..
