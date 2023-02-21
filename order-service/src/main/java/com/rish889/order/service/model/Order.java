@@ -13,7 +13,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @NoArgsConstructor
 @Table("products")
 @Builder
-public class Product {
+public class Order {
     @Id
     @Column(value = "order_id")
     private Long orderId;
