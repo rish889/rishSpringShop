@@ -6,7 +6,7 @@ java -jar \
 -Drss.postgres.host=localhost:5432 \
 target/product-service-0.0.1-SNAPSHOT.jar
 
-# mvn -f ./gatling-maven-plugin-demo-java/pom.xml gatling:test
+# mvn -f ./gatling-load-test/pom.xml gatling:test
 
 # cdk synth
 # cdk deploy
