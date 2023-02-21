@@ -5,3 +5,5 @@ java -jar \
 -Dspring.profiles.active=local \
 -Drss.postgres.host=localhost:5432 \
 target/product-service-0.0.1-SNAPSHOT.jar
+
+# mvn -f ./gatling-maven-plugin-demo-java/pom.xml gatling:test
