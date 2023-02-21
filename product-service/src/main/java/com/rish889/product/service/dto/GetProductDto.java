@@ -20,4 +20,8 @@ public class GetProductDto {
     @Schema(example = "iphone4")
     @JsonProperty("product_name")
     private String productName;
+
+    @Schema(example = "10")
+    @JsonProperty("quantity")
+    private Long quantity;
 }

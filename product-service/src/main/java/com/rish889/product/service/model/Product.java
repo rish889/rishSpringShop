@@ -21,5 +21,8 @@ public class Product {
 
     @Column(value = "product_name")
     private String productName;
+
+    @Column(value = "quantity")
+    private Long quantity;
 }
 

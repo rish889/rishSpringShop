@@ -8,6 +8,7 @@ public class ProductConverter {
     public static Product convertFromDto(final CreateProductDto dto) {
         return Product.builder()
                 .productName(dto.getProductName())
+                .quantity(dto.getQuantity())
                 .build();
     }
 
@@ -15,6 +16,7 @@ public class ProductConverter {
         return GetProductDto.builder()
                 .productId(entity.getProductId())
                 .productName(entity.getProductName())
+                .quantity(entity.getQuantity())
                 .build();
     }
 }
