@@ -16,9 +16,6 @@ services:
         limits:
           cpus: 0.50
           memory: 512M
-        reservations:
-          cpus: 0.25
-          memory: 128M
 
   db:
     image: postgres:14.1-alpine
@@ -30,6 +27,11 @@ services:
       - '5432:5432'
     volumes:
       - db:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: 0.01
+          memory: 50M
 
 volumes:
   db:
