@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateOrderDto {
-    @Schema(example = "123e4567-e89b-42d3-a456-556642440000")
+    @Schema(example = "1")
     @NotBlank(message = "user_id must not be blank")
     @JsonProperty("user_id")
     private String userId;

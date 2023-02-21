@@ -16,7 +16,7 @@ public class GetOrderDto {
     @JsonProperty("order_id")
     private Long orderId;
 
-    @Schema(example = "123e4567-e89b-42d3-a456-556642440000")
+    @Schema(example = "1")
     @JsonProperty("user_id")
     private String userId;
 
