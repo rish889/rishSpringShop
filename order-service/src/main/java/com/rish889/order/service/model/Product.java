@@ -14,11 +14,17 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("products")
 @Builder
 public class Product {
-
     @Id
-    private Long id;
+    @Column(value = "order_id")
+    private Long orderId;
 
-    @Column(value = "product_name")
-    private String productName;
+    @Column(value = "user_id")
+    private String userId;
+
+    @Column(value = "product_id")
+    private Long productId;
+
+    @Column(value = "quantity")
+    private Long quantity;
 }
 
