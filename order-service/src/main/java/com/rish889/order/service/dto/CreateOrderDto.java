@@ -13,10 +13,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateOrderDto {
-    @Schema(example = "iphone4")
-    @NotBlank(message = "product_name must not be blank")
-    @JsonProperty("product_name")
-    private String productName;
+    @Schema(example = "123e4567-e89b-42d3-a456-556642440000")
+    @NotBlank(message = "user_id must not be blank")
+    @JsonProperty("user_id")
+    private String userId;
+
+    @Schema(example = "5")
+    @NotNull(message = "product_id must not be null")
+    @Positive(message = "product_id must be greater than 0")
+    @JsonProperty("product_id")
+    private Long productId;
 
     @Schema(example = "10")
     @NotNull(message = "quantity must not be null")
