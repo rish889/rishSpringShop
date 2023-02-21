@@ -13,7 +13,7 @@ public class ProductConverter {
 
     public static GetProductDto convertToDto(final Product entity) {
         return GetProductDto.builder()
-                .productId(entity.getId())
+                .productId(entity.getProductId())
                 .productName(entity.getProductName())
                 .build();
     }
