@@ -15,9 +15,17 @@ public class GetOrderDto {
 
     @Schema(example = "1")
     @JsonProperty("order_id")
-    private Long id;
+    private Long orderId;
 
-    @Schema(example = "iphone4")
-    @JsonProperty("product_name")
-    private String productName;
+    @Schema(example = "123e4567-e89b-42d3-a456-556642440000")
+    @JsonProperty("user_id")
+    private String userId;
+
+    @Schema(example = "1")
+    @JsonProperty("product_id")
+    private Long productId;
+
+    @Schema(example = "10")
+    @JsonProperty("quantity")
+    private Long quantity;
 }

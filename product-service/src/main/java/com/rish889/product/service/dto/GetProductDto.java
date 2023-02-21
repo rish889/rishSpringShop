@@ -15,7 +15,7 @@ public class GetProductDto {
 
     @Schema(example = "1")
     @JsonProperty("product_id")
-    private Long id;
+    private Long productId;
 
     @Schema(example = "iphone4")
     @JsonProperty("product_name")

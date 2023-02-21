@@ -13,7 +13,7 @@ public class OrderConverter {
 
     public static GetOrderDto convertToDto(final Product entity) {
         return GetOrderDto.builder()
-                .id(entity.getId())
+                .orderId(entity.getId())
                 .productName(entity.getProductName())
                 .build();
     }
