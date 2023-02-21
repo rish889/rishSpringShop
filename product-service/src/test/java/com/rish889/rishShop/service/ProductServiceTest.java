@@ -1,7 +1,8 @@
 package com.rish889.rishShop.service;
 
-import com.rish889.rishShop.model.Product;
-import com.rish889.rishShop.repository.ProductRepository;
+import com.rish889.product.service.model.Product;
+import com.rish889.product.service.repository.ProductRepository;
+import com.rish889.product.service.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

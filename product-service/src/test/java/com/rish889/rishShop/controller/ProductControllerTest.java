@@ -1,8 +1,9 @@
 package com.rish889.rishShop.controller;
 
-import com.rish889.rishShop.model.Product;
-import com.rish889.rishShop.security.SpringSecurityConfiguration;
-import com.rish889.rishShop.service.ProductService;
+import com.rish889.product.service.controller.ProductController;
+import com.rish889.product.service.model.Product;
+import com.rish889.product.service.security.SpringSecurityConfiguration;
+import com.rish889.product.service.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
