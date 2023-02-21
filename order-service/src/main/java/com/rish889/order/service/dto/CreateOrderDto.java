@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateProductDto {
+public class CreateOrderDto {
     @Schema(example = "iphone4")
     @NotBlank(message = "product_name must not be blank")
     @JsonProperty("product_name")

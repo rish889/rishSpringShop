@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetProductDto {
+public class GetOrderDto {
 
     @Schema(example = "1")
     private Long id;

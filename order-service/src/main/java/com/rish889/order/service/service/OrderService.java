@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 @Service
 @Slf4j
 @Transactional
-public class ProductService {
+public class OrderService {
     @Autowired
     private ProductRepository productRepository;
 
@@ -22,7 +22,7 @@ public class ProductService {
                 .switchIfEmpty(Mono.error(new BadRequestException("Product not found. ProductId : " + productId)));
     }
 
-    public Mono<Product> createProduct(Product product) {
+    public Mono<Product> createOrder(Product product) {
         return productRepository.save(product);
     }
 }
