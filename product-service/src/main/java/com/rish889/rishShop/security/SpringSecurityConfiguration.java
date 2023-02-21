@@ -16,6 +16,8 @@ public class SpringSecurityConfiguration {
                 .csrf().disable()
                 .httpBasic(Customizer.withDefaults())
                 .authorizeExchange()
+                .pathMatchers("/").permitAll()
+                .pathMatchers("/v1/products/*").permitAll()
                 .anyExchange().authenticated()
                 .and().formLogin()
                 .and()

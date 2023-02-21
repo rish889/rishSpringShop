@@ -23,7 +23,7 @@ class ProductControllerIntegrationTest {
                 .baseUrl("http://localhost:" + port)
                 .build()
                 .get()
-                .uri("/products/1")
+                .uri("/v1/products/1")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-Type", "application/json")
