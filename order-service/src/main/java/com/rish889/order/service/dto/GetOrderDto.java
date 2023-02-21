@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class GetOrderDto {
 
     @Schema(example = "1")
+    @JsonProperty("order_id")
     private Long id;
 
     @Schema(example = "iphone4")

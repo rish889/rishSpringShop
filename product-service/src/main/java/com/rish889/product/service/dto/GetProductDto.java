@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class GetProductDto {
 
     @Schema(example = "1")
+    @JsonProperty("product_id")
     private Long id;
 
     @Schema(example = "iphone4")
