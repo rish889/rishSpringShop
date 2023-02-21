@@ -9,11 +9,11 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.rish889</groupId>
-	<artifactId>rishShop</artifactId>
+	<artifactId>rishSpringShop</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>RishShop</name>
-	<description>Demo project for Rish Shop</description>
+	<name>RishSpringShop</name>
+	<description>Demo project for Rish Spring Shop</description>
 	<properties>
 		<java.version>18</java.version>
 	</properties>
