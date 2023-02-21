@@ -2,7 +2,7 @@ package com.rish889.order.service.service;
 
 import com.rish889.order.service.exception.BadRequestException;
 import com.rish889.order.service.model.Order;
-import com.rish889.order.service.repository.ProductRepository;
+import com.rish889.order.service.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,15 +14,15 @@ import reactor.core.publisher.Mono;
 @Transactional
 public class OrderService {
     @Autowired
-    private ProductRepository productRepository;
+    private OrderRepository orderRepository;
 
     public Mono<Order> findById(Long productId) {
-        return productRepository
+        return orderRepository
                 .findById(productId)
                 .switchIfEmpty(Mono.error(new BadRequestException("Product not found. ProductId : " + productId)));
     }
 
     public Mono<Order> createOrder(Order order) {
-        return productRepository.save(order);
+        return orderRepository.save(order);
     }
 }
