@@ -11,13 +11,21 @@ services:
       - '8080:80'
     depends_on:
       - db
+    deploy:
+      resources:
+        limits:
+          cpus: 0.50
+          memory: 512M
+        reservations:
+          cpus: 0.50
+          memory: 512M
 
   db:
     image: postgres:14.1-alpine
     container_name: rish889_postgres
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres@123
+      - POSTGRES_PASSWORD=postgres
     ports:
       - '5432:5432'
     volumes:
