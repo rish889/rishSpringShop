@@ -25,9 +25,9 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>product-service-adapter</module>
 		<module>product-service</module>
-		<module>order-service</module>
+		<module>product-service-impl</module>
+		<module>order-service-impl</module>
 	</modules>
 
 </project>
