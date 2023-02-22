@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>com.rish889</groupId>
-            <artifactId>product-service-api</artifactId>
+            <artifactId>product-service-adapter</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
