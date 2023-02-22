@@ -27,7 +27,7 @@ class ProductRepositoryTest {
                 .create(actualProductMono)
                 .consumeNextWith(actualProduct -> {
                     assertEquals(
-                            Product.builder().id(1l).productName("iPhone 10").build(),
+                            Product.builder().productId(1l).productName("iPhone 10").build(),
                             actualProduct);
                 })
                 .verifyComplete();

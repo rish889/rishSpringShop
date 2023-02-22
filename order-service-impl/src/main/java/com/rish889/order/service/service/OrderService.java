@@ -20,13 +20,13 @@ public class OrderService {
     @Autowired
     private ProductServiceAdapter productServiceAdapter;
 
-    public Mono<Order> findByOrderId(Long productId) {
-        return productServiceAdapter
-                .getProductByProductId()
-                .log()
-                .flatMap(getProductDto -> orderRepository
-                        .findById(productId)
-                        .switchIfEmpty(Mono.error(new BadRequestException("Product not found. ProductId : " + productId))));
+    public Mono<Order> findByOrderId(Long orderId) {
+        return orderRepository
+                .findById(orderId)
+                .flatMap(order -> productServiceAdapter.getProductByProductId(order.getProductId())
+                        .log()
+                        .map(getProductDto -> order))
+                .switchIfEmpty(Mono.error(new BadRequestException("Order not found. OrderId : " + orderId)));
     }
 
     public Mono<Order> createOrder(Order order) {

@@ -21,8 +21,8 @@ public class ProductServiceAdapter {
     @Autowired
     private WebClient productServiceWebClient;
 
-    public Mono<GetProductDto> getProductByProductId() {
-        final String uri = ProductUrls.GET_PRODUCT_BY_PRODUCT_ID_V1_PREFIX + "3";
+    public Mono<GetProductDto> getProductByProductId(Long productId) {
+        final String uri = ProductUrls.GET_PRODUCT_BY_PRODUCT_ID_V1_PREFIX + productId;
 
         return productServiceWebClient
                 .get()
