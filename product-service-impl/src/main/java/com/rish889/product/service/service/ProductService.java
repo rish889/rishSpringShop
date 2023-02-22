@@ -16,7 +16,7 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public Mono<Product> findById(Long productId) {
+    public Mono<Product> findByProductId(Long productId) {
         return productRepository
                 .findById(productId)
                 .switchIfEmpty(Mono.error(new BadRequestException("Product not found. ProductId : " + productId)));

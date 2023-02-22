@@ -28,7 +28,7 @@ class ProductControllerTest {
 
     @Test
     public void testGetProduct() {
-        when(productService.findById(1l)).thenReturn(
+        when(productService.findByProductId(1l)).thenReturn(
                 Mono.just(Product.builder()
                         .productName("iPhone 10")
                         .build()));

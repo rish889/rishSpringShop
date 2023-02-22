@@ -30,7 +30,7 @@ class ProductServiceTest {
                         .productName("iPhone 10")
                         .build()));
 
-        Mono<Product> actualProductMono = productService.findById(1l);
+        Mono<Product> actualProductMono = productService.findByProductId(1l);
 
         StepVerifier
                 .create(actualProductMono)

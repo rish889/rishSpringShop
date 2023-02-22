@@ -20,7 +20,7 @@ public class OrderService {
     @Autowired
     private ProductServiceAdapter productServiceAdapter;
 
-    public Mono<Order> findById(Long productId) {
+    public Mono<Order> findByOrderId(Long productId) {
         return productServiceAdapter
                 .getProductByProductId()
                 .log()

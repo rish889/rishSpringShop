@@ -1,5 +1,6 @@
 package com.rish889.order.service.controller;
 
+import com.rish889.order.service.constant.OrderUrls;
 import com.rish889.order.service.convertor.OrderConverter;
 import com.rish889.order.service.dto.CreateOrderDto;
 import com.rish889.order.service.dto.GetOrderDto;
@@ -23,15 +24,15 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping(value = "/{orderId}")
-    public Mono<ResponseEntity<GetOrderDto>> getOrderById(@PathVariable @Positive(message = "OrderId must be greater than 0") @Parameter(example = "1") Long orderId) {
-        log.info("getOrderById() : {}", orderId);
-        return orderService.findById(orderId)
+    @GetMapping(value = (OrderUrls.GET_ORDER_BY_ORDER_ID_V1))
+    public Mono<ResponseEntity<GetOrderDto>> getOrderByOrderId(@PathVariable @Positive(message = "OrderId must be greater than 0") @Parameter(example = "1") Long orderId) {
+        log.info("getOrderByOrderId() : {}", orderId);
+        return orderService.findByOrderId(orderId)
                 .map(OrderConverter::convertToDto)
                 .map(u -> ResponseEntity.ok(u));
     }
 
-    @PostMapping
+    @PostMapping(value = (OrderUrls.CREATE_ORDER_V1))
     public Mono<ResponseEntity<GetOrderDto>> createOrder(@Valid @RequestBody CreateOrderDto dto) {
         log.info("createOrder() : {}", dto);
 
