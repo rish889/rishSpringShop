@@ -4,7 +4,7 @@ import com.rish889.order.service.exception.BadRequestException;
 import com.rish889.order.service.model.Order;
 import com.rish889.order.service.repository.OrderRepository;
 import com.rish889.adapter.product.service.client.ProductServiceAdapter;
-import com.rish889.adapter.product.service.dto.GetProductDto;
+import com.rish889.product.service.dto.GetProductDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

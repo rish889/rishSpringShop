@@ -1,6 +1,6 @@
 package com.rish889.adapter.product.service.client;
 
-import com.rish889.adapter.product.service.dto.GetProductDto;
+import com.rish889.product.service.dto.GetProductDto;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;

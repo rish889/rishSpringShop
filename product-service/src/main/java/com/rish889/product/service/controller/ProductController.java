@@ -2,8 +2,8 @@ package com.rish889.product.service.controller;
 
 import com.rish889.product.service.convertor.ProductConverter;
 import com.rish889.product.service.service.ProductService;
-import com.rish889.adapter.product.service.dto.CreateProductDto;
-import com.rish889.adapter.product.service.dto.GetProductDto;
+import com.rish889.product.service.dto.CreateProductDto;
+import com.rish889.product.service.dto.GetProductDto;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
