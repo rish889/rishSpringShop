@@ -1,5 +1,6 @@
 package com.rish889.adapter.product.service;
 
+import com.rish889.product.service.constant.ProductUrls;
 import com.rish889.product.service.dto.GetProductDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class ProductServiceAdapter {
     private WebClient productServiceWebClient;
 
     public Mono<GetProductDto> getProductByProductId() {
-        final String uri = "/v1/products/1";
+        final String uri = ProductUrls.GET_PRODUCT_BY_PRODUCT_ID_V1_PREFIX + "3";
 
         return productServiceWebClient
                 .get()
