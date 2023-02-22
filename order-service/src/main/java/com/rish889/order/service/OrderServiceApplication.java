@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackages = {
         "com.rish889.order.service",
-        "com.rish889.product.service.adapter"
+        "com.rish889.adapter"
 })
 public class OrderServiceApplication {
 
