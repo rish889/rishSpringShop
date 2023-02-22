@@ -20,12 +20,12 @@ public class ProductServiceAdapter {
     private final int RETRY_DELAY = 10;
 
     @Autowired
-    private WebClient productServiceClient;
+    private WebClient productServiceWebClient;
 
     public Mono<GetProductDto> getProductByProductId() {
         final String uri = "/v1/products/1";
 
-        return productServiceClient
+        return productServiceWebClient
                 .get()
                 .uri(uri)
                 .retrieve()

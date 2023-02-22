@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class ProductServiceAdapterConfig {
     @Bean
-    public WebClient productServiceClient() {
+    public WebClient productServiceWebClient() {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
                 .responseTimeout(Duration.ofMillis(5000))
