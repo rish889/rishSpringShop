@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.rish889.adapter", "com.rish889.order"})
+@ComponentScan(basePackages = {"com.rish889.order", "com.rish889.adapter"})
 public class OrderServiceApplication {
 
     public static void main(String[] args) {
