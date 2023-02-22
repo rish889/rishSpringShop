@@ -25,6 +25,7 @@
 	</dependencyManagement>
 
 	<modules>
+		<module>product-service-api</module>
 		<module>product-service</module>
 		<module>order-service</module>
 	</modules>
