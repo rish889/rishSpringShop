@@ -13,7 +13,7 @@ import reactor.util.retry.Retry;
 import java.time.Duration;
 
 @Slf4j
-@EnableWebFlux
+//@EnableWebFlux
 @Component
 public class ProductServiceAdapter {
     private final int MAX_RETRIES = 3;
