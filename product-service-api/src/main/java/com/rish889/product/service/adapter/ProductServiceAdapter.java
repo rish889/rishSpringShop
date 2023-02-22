@@ -1,4 +1,4 @@
-package com.rish889.adapter.product.service.client;
+package com.rish889.product.service.adapter;
 
 import com.rish889.product.service.dto.GetProductDto;
 import lombok.extern.slf4j.Slf4j;
