@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
@@ -13,7 +12,6 @@ import reactor.util.retry.Retry;
 import java.time.Duration;
 
 @Slf4j
-//@EnableWebFlux
 @Component
 public class ProductServiceAdapter {
     private final int MAX_RETRIES = 3;
