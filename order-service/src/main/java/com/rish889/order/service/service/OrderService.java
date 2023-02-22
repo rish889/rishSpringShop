@@ -1,6 +1,6 @@
 package com.rish889.order.service.service;
 
-import com.rish889.product.service.adapter.ProductServiceAdapter;
+import com.rish889.adapter.product.service.ProductServiceAdapter;
 import com.rish889.order.service.exception.BadRequestException;
 import com.rish889.order.service.model.Order;
 import com.rish889.order.service.repository.OrderRepository;
