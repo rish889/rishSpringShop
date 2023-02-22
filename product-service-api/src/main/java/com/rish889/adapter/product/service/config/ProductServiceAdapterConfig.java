@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Configuration
-public class ServiceConfig {
+public class ProductServiceAdapterConfig {
     @Bean
     public WebClient productServiceClient() {
         HttpClient httpClient = HttpClient.create()
