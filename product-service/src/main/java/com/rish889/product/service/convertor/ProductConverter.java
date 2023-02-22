@@ -1,7 +1,7 @@
 package com.rish889.product.service.convertor;
 
-import com.rish889.product.service.dto.CreateProductDto;
-import com.rish889.product.service.dto.GetProductDto;
+import com.rish889.adapter.product.service.dto.CreateProductDto;
+import com.rish889.adapter.product.service.dto.GetProductDto;
 import com.rish889.product.service.model.Product;
 
 public class ProductConverter {

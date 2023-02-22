@@ -1,4 +1,4 @@
-package com.rish889.product.service.dto;
+package com.rish889.adapter.product.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;

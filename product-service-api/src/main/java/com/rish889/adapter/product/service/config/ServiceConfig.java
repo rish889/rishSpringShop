@@ -1,4 +1,4 @@
-package com.rish889.product.service.config;
+package com.rish889.adapter.product.service.config;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
